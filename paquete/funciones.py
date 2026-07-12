@@ -164,7 +164,7 @@ def sala_torneo() -> list:
     nombre = nombre_jugador()
     puede_jugar = True
     puntaje = 0
-    sala_actual = 0
+    sala_actual = -1
     numero = elegir_numero(CANTIDAD_PREGUNTAS)
 
     while puede_jugar and sala_actual <= CANTIDAD_SALAS:
@@ -200,6 +200,9 @@ def mostrar_datos_torneo(jugadores: list) -> None:
     else:
         print(f"El jugador que mas lejos llego fue {ganadores_sala}, con {maximo_sala} salas")
         print("-----------------------------")
+    perdedores = jugadores_primera_sala(jugadores)
+    print(f"Los jugadores que no pasaron la primera sala fueron: {perdedores}")
+    
 
 
 def comparar_resultados_torneo(jugadores:list)-> list:
@@ -228,7 +231,7 @@ def comparar_salas_resultado(jugadores:list)-> list:
 
     for jugador in jugadores:
         nombre = jugador[0]
-        sala = jugador[1][2] #tenes que traer la cant de salas del jugador
+        sala = jugador[1][2]
 
         if sala > maxima_sala:
             maxima_sala = sala
@@ -238,6 +241,19 @@ def comparar_salas_resultado(jugadores:list)-> list:
         
     return ganadores, maxima_sala
 
+def jugadores_primera_sala(jugadores:list) ->list:
+    
+    perdedores = []
+
+    for jugador in jugadores:
+        nombre = jugador[0]
+        sala = jugador[1][2]
+
+        if sala < 1:
+            perdedores.append(nombre)
+        else:
+            pass
+    return perdedores
 
 
 #ahora mandar los datos del torneo a puntajes.csv

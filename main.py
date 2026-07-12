@@ -1,4 +1,5 @@
 from paquete import funciones
+import pygame
 funciones.jijo()
 
 funciones.menu()
