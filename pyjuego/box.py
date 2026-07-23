@@ -4,6 +4,7 @@ class Box:
     def __init__(self,x,y,w,h,color, texto=""):
         self.color = color
         self.rect = pygame.Rect(x,y,w,h)
+        self.texto = texto
 
         #texto
         self.font = pygame.font.SysFont("Arial", 24)

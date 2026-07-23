@@ -3,6 +3,8 @@ from settings import *
 from TextInputBox import *
 from box import Box
 from juego import *
+
+
 #configuracion inicial
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -23,24 +25,6 @@ block5 = Box(400,30,450,250,"green", "Titulo")
 block_bg = Box((WINDOW_WIDTH / 3)+100,0,610,WINDOW_HEIGHT,"red")
 
 
-"""
-def jugar():
-    blockjuego = Box(450,330,200,70,"white", "Jugar2")
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-
-        screen.fill(COLORS["royalblue"])
-        blockjuego.draw(screen)
-        pygame.display.flip()
-        clock.tick(60) 
-
-"""
 def puntaje():
     blockjuego = Box(450,330,200,70,"white", "Puntaje")
     running = True
