@@ -22,7 +22,7 @@ preguntas = {
      1:{
      "pregunta": "¿Los diccionarios como guardan valores?",
      "opciones": ["a.en valor llave:valor", "b.con una variable" ,"c.en una lista" ,"d.no guardan"],
-     "respuesta": "b",
+     "respuesta": "a",
      "valor_puntaje":10
      },
      2:{
