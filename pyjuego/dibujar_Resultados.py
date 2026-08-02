@@ -44,16 +44,16 @@ class dibujar_Resultados:
                 pygame.draw.rect(surface, self.border_color, box.rect, self.border_width)
 
 class TablaResultadoFinal:
-    def __init__(self, x, y, cell_w=200, cell_h=50, color="white", border_color=(0, 0, 0), border_width=2):
+    def __init__(self, x, y, w=200, h=50, color="white", border_color=(0, 0, 0), border_width=2):
         self.x = x
         self.y = y
-        self.cell_w = cell_w
-        self.cell_h = cell_h
+        self.w = w
+        self.h = h
         self.color = color
         self.border_color = border_color
         self.border_width = border_width
 
-        self.headers = ["Nombre", "Estado Final"]
+        self.estado = ["Nombre", "Estado Final"]
         self.resultados = []
         self.tabla_boxes = []
 
@@ -65,14 +65,14 @@ class TablaResultadoFinal:
         self._reconstruir()
 
     def _reconstruir(self):
-        data = [self.headers] + self.resultados
+        data = [self.estado] + self.resultados
         self.tabla_boxes = []
         for row_index, row_data in enumerate(data):
             fila_boxes = []
             for col_index, valor in enumerate(row_data):
-                cell_x = self.x + col_index * self.cell_w
-                cell_y = self.y + row_index * self.cell_h
-                box = Box(cell_x, cell_y, self.cell_w, self.cell_h, self.color, str(valor))
+                cell_x = self.x + col_index * self.w
+                cell_y = self.y + row_index * self.h
+                box = Box(cell_x, cell_y, self.w, self.h, self.color, str(valor))
                 fila_boxes.append(box)
             self.tabla_boxes.append(fila_boxes)
 

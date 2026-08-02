@@ -15,6 +15,10 @@ class Box:
         return self.rect.collidepoint(pos)
     
     def draw(self,surface):
-        pygame.draw.rect(surface, self.color ,self.rect)
+        #pygame.draw.rect(surface, self.color ,self.rect)
+        #surface.blit(self.text_surf, self.text_rect)
+        pygame.draw.rect(surface, self.color, self.rect)
+        self.text_surf = self.font.render(self.texto, True, "red")  # re-render every frame
+        self.text_rect = self.text_surf.get_rect(center=self.rect.center)
         surface.blit(self.text_surf, self.text_rect)
 

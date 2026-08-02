@@ -3,7 +3,7 @@ from settings import *
 from TextInputBox import *
 from box import Box
 from juego import *
-
+from puntuacion import *
 
 #configuracion inicial
 pygame.init()
@@ -23,6 +23,7 @@ block3 = Box(450,630,200,70,"white", "Salir")
 block4 = Box(450,330,200,70,"white", "Jugar")
 block5 = Box(400,30,450,250,"green", "Titulo")
 block_bg = Box((WINDOW_WIDTH / 3)+100,0,610,WINDOW_HEIGHT,"red")
+
 
 
 def puntaje():
@@ -95,7 +96,7 @@ while running:
 
     if block.collidepoint((mx,my)):
         if click:
-            puntaje()
+            puntuacion()
 
     if block2.collidepoint((mx,my)):
         if click:
@@ -105,7 +106,13 @@ while running:
             running = False
     if block4.collidepoint((mx,my)):
         if click:
-            jugar()
+            jugadores = ingresar_jugadores()
+            resultados = []
+            for i in range(jugadores):
+                resultado_jugador = jugar()
+                resultados.append(resultado_jugador)
+            mostrar_torneo(resultados)
+
     click = False
 
     pygame.display.flip()
