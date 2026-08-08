@@ -1,0 +1,3 @@
+Jugador: wa | estado final: Completo | puntaje: 113
+Jugador: b | estado final: No Completo | puntaje: 12
+Jugador: w | estado final: No Completo | puntaje: 0

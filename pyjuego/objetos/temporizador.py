@@ -1,5 +1,5 @@
 import pygame
-from box import *
+from objetos.box import *
 
 
 class Temporizador:

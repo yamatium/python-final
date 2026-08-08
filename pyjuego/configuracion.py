@@ -1,6 +1,27 @@
 import pygame
 
+pygame.mixer.init()
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
+
+entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
+salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
+musica_menu = pygame.mixer.music.load("pyjuego/sonidos/eugene.mp3")
+pygame.mixer.music.play()
+
+def entrar_sonido():
+    entrar_sfx.play()
+    pygame.time.wait(int(salir_sfx.get_length() * 1000))
+
+def salir_sonido():
+    salir_sfx.play()
+    pygame.time.wait(int(salir_sfx.get_length() * 1000)) #regresa y convierte segundos en ms para time.wait
+
+def musica_menu():
+    pygame.mixer.music.load("pyjuego/sonidos/eugene.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+    
+
 COLORS = {
     "gray": "gray",
     "white": "#ffffff",

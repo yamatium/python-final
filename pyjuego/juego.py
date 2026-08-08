@@ -1,11 +1,12 @@
 import pygame
 import random
 
-from settings import *
-from box import Box
-from dibujar_Resultados import *
-from ingresar_datos import *
-from temporizador import *
+from puntuacion import *
+from configuracion import *
+
+from objetos.box import Box
+from objetos.dibujar_Resultados import *
+from objetos.temporizador import *
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
@@ -55,6 +56,7 @@ def jugar():
     block_final = Box(600, 50, 400, 100, "green", "Juego terminado!")
 
     tiempo = Temporizador(20)
+    juego_pausa = False
     running = True
     while running:
 
@@ -64,6 +66,9 @@ def jugar():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                if event.key == pygame.K_SPACE:
+                    juego_pausa = True
+                    print("pausa")
                 if texto_activo:
                     if event.key == pygame.K_BACKSPACE:
                         respuesta = respuesta[:-1]

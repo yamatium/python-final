@@ -1,5 +1,5 @@
 import pygame
-from box import Box
+from objetos.box import Box
 
 class dibujar_Resultados:
     def __init__(self, x, y, cell_w=150, cell_h=50, color="white", border_color=(0, 0, 0), border_width=2):
@@ -11,7 +11,7 @@ class dibujar_Resultados:
         self.border_color = border_color
         self.border_width = border_width
 
-        self.headers = ["Sala", "Puntaje Sala", "Puntaje Total"]
+        self.columnas = ["Sala", "Puntaje Sala", "Puntaje Total"]
         self.resultados_salas = []  # filas dinamicas
         self.tabla_boxes = []       # grid de Box, se reconstruye cada vez que cambia
 
@@ -26,7 +26,7 @@ class dibujar_Resultados:
         self._reconstruir()
 
     def _reconstruir(self):
-        data = [self.headers] + self.resultados_salas
+        data = [self.columnas] + self.resultados_salas
         self.tabla_boxes = []
         for row_index, row_data in enumerate(data):
             fila_boxes = []

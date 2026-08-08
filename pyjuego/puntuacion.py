@@ -1,10 +1,31 @@
 import pygame, os
-from settings import *
-from box import Box
+from configuracion import *
+from objetos.box import Box
 from ingresar_datos import *
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
+
+def guardar_puntaje(nombre, estado_final,puntaje):
+    estado_final = "Completo" if estado_final else "No Completo"
+    with open("puntuacion.txt", "a") as archivo:
+        archivo.write(f"Jugador: {nombre} | estado final: {estado_final} | puntaje: {puntaje}\n")
+
+def cargar_puntuacion():
+    puntuacion = []
+    try:
+        with open("puntuacion.txt", "r") as archivo:
+            for linea in archivo:
+                # "Jugador: b | estado final: Completo | puntaje: 91"
+                partes = linea.strip().split(" | ")  # strip saca el \n invisible
+                nombre = partes[0].replace("Jugador: ", "")
+                estado = partes[1].replace("estado final: ", "")
+                puntaje = partes[2].replace("puntaje: ", "")
+                puntuacion.append({"nombre": nombre, "estado": estado, "puntaje": puntaje}) # lo append como diccionario
+                #{"nombre": "b",    "estado": "Completo",   "puntaje": "91"}
+    except FileNotFoundError:
+        print("Archivo no encontrado")
+    return puntuacion
 
 def borrar_puntuacion():
     try:
@@ -15,7 +36,7 @@ def borrar_puntuacion():
 def puntuacion():
     puntajes = cargar_puntuacion()
 
-    block_titulo = Box(450, 50, 400, 60, "green", "Leaderboard")
+    block_titulo = Box(450, 50, 400, 60, "green", "Tabla de puntuaciones")
     block_borrar = Box(450, 650, 400, 60, "black", "Borrar historial")
     block_salir = Box(200, 450, 400, 60, "gray", "salir")
     

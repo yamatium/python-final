@@ -1,6 +1,6 @@
 import pygame
-from settings import *
-from box import *
+from configuracion import *
+from objetos.box import *
 
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -23,26 +23,6 @@ def validar_numero_parcial(texto_actual, caracter):
     texto_resultante = texto_actual + caracter
     valor = int(texto_resultante)
     return valor <= 10
-
-def guardar_puntaje(nombre, estado_final,puntaje):
-    estado_final = "Completo" if estado_final else "No Completo"
-    with open("puntuacion.txt", "a") as archivo:
-        archivo.write(f"Jugador: {nombre} | estado final: {estado_final} | puntaje: {puntaje}\n")
-
-def cargar_puntuacion():
-    puntuacion = []
-    try:
-        with open("puntuacion.txt", "r") as archivo:
-            for linea in archivo:
-                # "Jugador: b | estado final: Completo | puntaje: 91"
-                partes = linea.strip().split(" | ")
-                nombre = partes[0].replace("Jugador: ", "")
-                estado = partes[1].replace("estado final: ", "")
-                puntaje = partes[2].replace("puntaje: ", "")
-                puntuacion.append({"nombre": nombre, "estado": estado, "puntaje": puntaje})
-    except FileNotFoundError:
-        print("Archivo no encontrado")
-    return puntuacion
 
 
 def ingreso_datos():
