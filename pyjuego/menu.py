@@ -1,7 +1,7 @@
 import pygame, random
 from configuracion import *
 from objetos.TextInputBox import *
-from objetos.box import Box
+from objetos.box import Box,dibujar_botones
 from juego import *
 from puntuacion import *
 
@@ -15,6 +15,7 @@ icon = pygame.image.load("assets/images/fred.png")
 pygame.display.set_icon(icon)
 font = pygame.font.SysFont(None, 150)
 
+# imagen de menu
 gatos = []
 for i in range(1,11):
     img = pygame.image.load(f"pyjuego/imagenes/gatos/{i}.png").convert_alpha()
@@ -22,15 +23,12 @@ for i in range(1,11):
     gatos.append(img)
 gato_actual = random.choice(gatos)
 
-
-
-a = font.render("FINAL", True, "green")
-
 #imagenes
 fondo = pygame.image.load("pyjuego/imagenes/cloud.jpg").convert()
 fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
 
 #objetos a usar
+a = font.render("FINAL", True, "green")
 text_input_box = TextInputBox(650, 150, 400, font)
 group = pygame.sprite.Group(text_input_box)
 rect_puntuacion = Box(40,480,220,100, "white", "puntajes")
@@ -40,10 +38,15 @@ rect_musica = Box(1100, 620, 150,70, "white", "musica")
 
 botones = [rect_jugar, rect_puntuacion, rect_musica, rect_salir]
 #variables 
-click = False
-pausar_musica = False
 running = True
 
+def empezar():
+    jugadores = ingresar_jugadores()
+    resultados = []
+    for j in range(jugadores):
+        resultado_jugador = jugar()
+        resultados.append(resultado_jugador)
+    mostrar_torneo(resultados)
 musica_menu()
 
 while running:
@@ -53,65 +56,33 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_m:  #K_SPACE usar para pausar el juego en juego.py pygame.K_SPACE
-                if pygame.mixer.music.get_busy():
-                    pygame.mixer.music.pause()
-                else:
-                    pygame.mixer.music.unpause()
+                manejar_musica()
             if event.key == pygame.K_ESCAPE:
                 running = False 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                click = True
-                print("click")
+                if rect_musica.collidepoint(event.pos):
+                    entrar_sonido()
+                    manejar_musica()
+                if rect_puntuacion.collidepoint(event.pos):
+                    rect_puntuacion.sonidoClick()
+                    puntuacion()
+                if rect_salir.collidepoint(event.pos):
+                    rect_salir.sonidoClick("salir")
+                    running = False
+                if rect_jugar.collidepoint(event.pos):
+                    pygame.mixer.music.fadeout(500)
+                    entrar_sonido()
+                    empezar()
+                    pygame.mixer.music.play(-1)
+                
            
-    
     mx, my = pygame.mouse.get_pos()
     screen.blit(fondo_escalado, (-50,-100))
-    
-    
-    #block5.draw(screen)
     screen.blit(a, (30,50))
-    rect_puntuacion.draw(screen)
-    rect_salir.draw(screen)
-    rect_jugar.draw(screen)
-    rect_musica.draw(screen)
     screen.blit(gato_actual, (800, 100))
 
-    for boton in botones:
-        if boton.collidepoint((mx,my)):
-            boton.color = COLORS["lightblue"]
-        else:
-            boton.color = COLORS["white"]
-
-    if rect_musica.collidepoint((mx,my)):
-        if click:
-            entrar_sonido()
-            if pygame.mixer.music.get_busy():
-                pygame.mixer.music.pause()
-            else:
-                pygame.mixer.music.unpause()
-
-    if rect_puntuacion.collidepoint((mx,my)):
-        if click:
-            entrar_sonido()
-            puntuacion()
-    if rect_salir.collidepoint((mx,my)):
-        if click:
-            salir_sonido()
-            running = False
-    if rect_jugar.collidepoint((mx,my)):
-        if click:
-            pygame.mixer.music.stop()
-            entrar_sonido()
-            jugadores = ingresar_jugadores()
-            resultados = []
-            for i in range(jugadores):
-                resultado_jugador = jugar()
-                resultados.append(resultado_jugador)
-            mostrar_torneo(resultados)
-            pygame.mixer.music.play(-1)
-
-    click = False
+    dibujar_botones(botones, screen, (mx, my))
     pygame.display.flip()
     clock.tick(60)
 

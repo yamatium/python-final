@@ -20,7 +20,12 @@ def musica_menu():
     pygame.mixer.music.load("pyjuego/sonidos/eugene.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
-    
+
+def manejar_musica():
+    if pygame.mixer.music.get_busy():
+        pygame.mixer.music.pause()
+    else:
+        pygame.mixer.music.unpause()
 
 COLORS = {
     "gray": "gray",

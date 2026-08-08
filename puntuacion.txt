@@ -1,3 +1,14 @@
-Jugador: wa | estado final: Completo | puntaje: 113
-Jugador: b | estado final: No Completo | puntaje: 12
-Jugador: w | estado final: No Completo | puntaje: 0
+Jugador: a | estado final: No Completo | puntaje: 0
+Jugador: b | estado final: No Completo | puntaje: 35
+Jugador: w | estado final: Completo | puntaje: 181
+Jugador: ah | estado final: No Completo | puntaje: 33
+Jugador: sa | estado final: Completo | puntaje: 204
+Jugador: am | estado final: No Completo | puntaje: 4
+Jugador: av | estado final: No Completo | puntaje: 22
+Jugador: aw | estado final: No Completo | puntaje: 8
+Jugador: ad | estado final: No Completo | puntaje: 55
+Jugador: an | estado final: No Completo | puntaje: 6
+Jugador: ax | estado final: No Completo | puntaje: 60
+Jugador: ad | estado final: No Completo | puntaje: 1
+Jugador: av | estado final: No Completo | puntaje: 0
+Jugador: da | estado final: No Completo | puntaje: 103
