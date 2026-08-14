@@ -11,28 +11,35 @@ from objetos.temporizador import *
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 
+def dibujar_opciones(screen, pregunta_aleatoria):
+    opciones = preguntas[pregunta_aleatoria]["opciones"]
+    posiciones = [(380, 330), (620, 330), (380, 430), (620, 430)]
+
+    for i in range(4):
+        fuente_opcion = font.render(opciones[i], True, "black")
+        x, y = posiciones[i]
+        screen.blit(fuente_opcion, (x, y))
+
 def jugar():
     color_active = (255, 255, 255)
     color_passive = (100, 100, 100)
     tabla_resultados = dibujar_Resultados(x=100, y=200, cell_w=150, cell_h=50)
     tabla_resultado_final = TablaResultadoFinal(x=100, y=100, w=225, h=50)
+    #imagenes
+    fondo = pygame.image.load("pyjuego/imagenes/castle2.png").convert()
+    fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
 
     nombre_jugador = ingreso_datos() # llama al ingreso de datos loop, regresa el nombre y continua al loop principal
+    if nombre_jugador is None:
+        return None
     juego_terminado = False
-
-    #posible uso de set
-    #picked = set()
-    #while len(picked) < 5:
-    #    picked.add(random.randint(1, 20))
-    #print(picked)  # {3, 7, 12, 15, 19} — no duplicates ✅
 
     # definir pregunta, opciones  y variantes
     pregunta_aleatoria = random.choice(list(preguntas.keys()))
-    pregunta_actual = preguntas[pregunta_aleatoria]["pregunta"]
-    opcion_a = preguntas[pregunta_aleatoria]["opciones"][0]
-    opcion_b = preguntas[pregunta_aleatoria]["opciones"][1]
-    opcion_c = preguntas[pregunta_aleatoria]["opciones"][2]
-    opcion_d = preguntas[pregunta_aleatoria]["opciones"][3]
+    pregunta_actual2 = font.render(f"{preguntas[pregunta_aleatoria]["pregunta"]}", True, "black")
+    screen.blit(pregunta_actual2, (400, 50))
+    dibujar_opciones(screen, pregunta_aleatoria)
+
     puntuacion = 0
     preguntas_correctas = 0
     sala = 1
@@ -43,19 +50,16 @@ def jugar():
     respuesta_final = ""
 
     #definir rectangulos para usar con  variables
-    rect_ingreso = pygame.Rect(500, 580, 180, 40)
-    rect_responder = Box(500, 650, 200, 70, "white", "Continuar")
-    block_a = Box(600,330,200,70,"white", f"{opcion_a}")
-    block_b = Box(850,330,200,70, "white", f"{opcion_b}")
-    block_c = Box(600,430,200,70,"white", f"{opcion_c}")
-    block_d = Box(850,430,200,70,"white", f"{opcion_d}")
-    block_pregunta = Box(600,30,450,200,"green", f"{pregunta_actual}")
-    block_puntuacion = Box(210,350,200,80,"gray", f"puntaje: {puntuacion}" )
-    block_correctas = Box(100,350,200,80, "gray", f"{preguntas_correctas}")
+    rect_ingreso = pygame.Rect(500, 580, 200, 40)
+    rect_responder = Box(500, 630, 200, 70, "white", "Continuar")
+    #block_pregunta = Box(360,30,620,150,"green", f"{pregunta_actual}")
+    block_puntuacion = Box(1000,250,200,80,"gray", f"puntaje: {puntuacion}" )
+
+    #block_correctas = Box(1000,200,200,80, "gray", f"{preguntas_correctas}") # a ser cambiado por una animacion
     block_salir = Box(600, 640, 450,100,"white", "Salir")
     block_final = Box(600, 50, 400, 100, "green", "Juego terminado!")
 
-    tiempo = Temporizador(20)
+    tiempo = Temporizador(60)
     juego_pausa = False
     running = True
     while running:
@@ -90,8 +94,7 @@ def jugar():
                         if block_salir.collidepoint(event.pos):
                             running = False
 
-
-        screen.fill(COLORS["royalblue"])
+        screen.blit(fondo_escalado, (-50,-100))
         mx, my = pygame.mouse.get_pos()
         color_nombre = color_active if texto_activo else color_passive
         tiempo.update()
@@ -99,13 +102,11 @@ def jugar():
         if not juego_terminado:
             # --- pantalla de cuestionario ---
 
-                block_a.draw(screen)
-                block_b.draw(screen)
-                block_c.draw(screen)
-                block_d.draw(screen)
-                block_pregunta.draw(screen)
+                screen.blit(pregunta_actual2, (400,50))
+                screen.blit(pregunta_actual2, (400, 50))
+                dibujar_opciones(screen, pregunta_aleatoria)
                 block_puntuacion.draw(screen)
-                block_correctas.draw(screen)
+                #block_correctas.draw(screen)
                 rect_responder.draw(screen)
                 tiempo.draw(screen)
 
@@ -139,14 +140,10 @@ def jugar():
                         
                     else:   
                         pregunta_aleatoria = random.choice(list(preguntas.keys()))
-                        pregunta_actual = preguntas[pregunta_aleatoria]["pregunta"]
-                        opciones = preguntas[pregunta_aleatoria]["opciones"]
-                        block_pregunta = Box(600, 30, 450, 200, "green", pregunta_actual)
-                        block_a = Box(600, 330, 200, 70, "white", opciones[0])
-                        block_b = Box(850, 330, 200, 70, "white", opciones[1])
-                        block_c = Box(600, 430, 200, 70, "white", opciones[2])
-                        block_d = Box(850, 430, 200, 70, "white", opciones[3])
-                        #tiempo.draw(screen)
+                        pregunta_actual2 = font.render(f"{preguntas[pregunta_aleatoria]["pregunta"]}", True, "black")
+                        screen.blit(pregunta_actual2, (400, 50))
+                        dibujar_opciones(screen, pregunta_aleatoria)
+                        screen.blit(pregunta_actual2, (400,50))
                         pygame.draw.rect(screen, color_nombre, rect_ingreso)
                         screen.blit(superficie_texto, (rect_ingreso.x + 5, rect_ingreso.y + 5))
                         intentos = 2
@@ -166,10 +163,10 @@ def jugar():
                     
                     
                 
-                block_puntuacion = Box(410, 350, 200, 80, "gray", f"puntaje: {puntuacion}")  # recreate with updated score
+                block_puntuacion = Box(1000,250, 200, 80, "gray", f"puntaje: {puntuacion}")  # recreate with updated score
                 block_puntuacion.draw(screen)
-                block_correctas = Box(200,350,200,80, "gray", f"{preguntas_correctas}")
-                block_correctas.draw(screen)
+                #block_correctas = Box(1000,200,200,80, "gray", f"{preguntas_correctas}")
+                #block_correctas.draw(screen)
                 
 
         else:
@@ -184,15 +181,6 @@ def jugar():
 
     resultados = {"nombre": nombre_jugador, "puntuacion": puntuacion, "salas": sala, "gano": estado_final}
     return resultados
-
-
-
-
-
-
-
-
-
 
 
 

@@ -42,11 +42,16 @@ running = True
 
 def empezar():
     jugadores = ingresar_jugadores()
+    if not jugadores :
+        return # exits to the main menu
     resultados = []
-    for j in range(jugadores):
+    for i in range(jugadores):
         resultado_jugador = jugar()
+        if resultado_jugador is None:
+            return # exits to the main menu
         resultados.append(resultado_jugador)
     mostrar_torneo(resultados)
+
 musica_menu()
 
 while running:
