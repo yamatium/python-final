@@ -125,6 +125,7 @@ def jugar():
                     puntuacion += preguntas[pregunta_aleatoria]["valor_puntaje"]
                     preguntas_correctas += 1
                     respuesta_final = ""
+                    respuesta_correcta()
 
                     tabla_resultados.agregar_resultado(
                         nombre_sala=f"Sala {sala}",
@@ -181,6 +182,51 @@ def jugar():
 
     resultados = {"nombre": nombre_jugador, "puntuacion": puntuacion, "salas": sala, "gano": estado_final}
     return resultados
+
+def respuesta_correcta():
+    clock = pygame.time.Clock()
+
+    # convert cuando no necesitas transparencia, convert_alpha cuando si
+    boton_salir = Box(450, 600, 300,80,"white", "continuar")
+    bien = pygame.image.load("pyjuego/imagenes/thumbs-up.png").convert()
+    bien_scale = pygame.transform.scale(bien, (498,390))
+
+    fondo_puerta = pygame.image.load("pyjuego/imagenes/doorTrans.png").convert_alpha()
+    fondo_real = pygame.image.load("pyjuego/imagenes/campo2.png").convert()
+    fondo_scale = pygame.transform.scale(fondo_puerta, (1500,700))
+
+    puerta_izquierda = pygame.image.load("pyjuego/imagenes/door2.png").convert_alpha()
+    izquierda_scale = pygame.transform.scale(puerta_izquierda, (300,450))
+    puerta_derecha = pygame.image.load("pyjuego/imagenes/door1.png").convert_alpha()
+    derecha_scale = pygame.transform.scale(puerta_derecha, (300,450))
+
+    mensaje = font.render("Respuesta Correcta!", True, "black")
+
+    x = 305
+    z = 600
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if boton_salir.collidepoint(event.pos):
+                        running = False
+
+        mx, my = pygame.mouse.get_pos()
+        screen.blit(fondo_real, (0,0))
+        screen.blit(bien_scale, (340,160))
+        screen.blit(mensaje, (410,120))
+        screen.blit(fondo_scale, (-100, -120))
+        screen.blit(izquierda_scale, (x,100))
+        screen.blit(derecha_scale, (z,100))
+
+        dibujar_botones(boton_salir, screen, (mx, my))
+        x -= 0.6
+        z += 0.6
+        pygame.display.flip()
+        clock.tick(60)
 
 
 

@@ -34,3 +34,4 @@ Jugador: a | estado final: No Completo | puntaje: 50
 Jugador: wa | estado final: Completo | puntaje: 225
 Jugador: a | estado final: No Completo | puntaje: 0
 Jugador: wa | estado final: Completo | puntaje: 176
+Jugador: wa | estado final: Completo | puntaje: 73

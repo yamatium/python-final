@@ -29,7 +29,15 @@ class Box:
         else:
             salir_sonido()
 
+#def dibujar_botones(botones, screen, mouse_pos):
+#    for boton in botones:
+#        boton.draw(screen)
+#        boton.color = COLORS["lightblue"] if boton.collidepoint(mouse_pos) else COLORS["white"]
 def dibujar_botones(botones, screen, mouse_pos):
-    for boton in botones:
-        boton.draw(screen)
-        boton.color = COLORS["lightblue"] if boton.collidepoint(mouse_pos) else COLORS["white"]
+    if type(botones) == list: # revisa que sea una lista
+        for boton in botones:
+            boton.draw(screen)
+            boton.color = COLORS["lightblue"] if boton.collidepoint(mouse_pos) else COLORS["white"]
+    else: 
+        botones.draw(screen)
+        botones.color = COLORS["lightblue"] if botones.collidepoint(mouse_pos) else COLORS["white"]
