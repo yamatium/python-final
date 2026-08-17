@@ -20,11 +20,20 @@ def dibujar_opciones(screen, pregunta_aleatoria):
         x, y = posiciones[i]
         screen.blit(fuente_opcion, (x, y))
 
+def dibujar_estado(nombre, estado_final): # dibuja al final de la partida
+    nombre = font.render(f"Jugador: {nombre}", True, "black")
+    if estado_final:
+        final = font.render("Ganaste!", True, "black")
+    else:
+        final = font.render("Perdiste!", True, "black")
+
+    resultado = [nombre ,final]
+    return resultado
+
 def jugar():
     color_active = (255, 255, 255)
     color_passive = (100, 100, 100)
-    tabla_resultados = dibujar_Resultados(x=100, y=200, cell_w=150, cell_h=50)
-    tabla_resultado_final = TablaResultadoFinal(x=100, y=100, w=225, h=50)
+    tabla_resultados = dibujar_Resultados(200,320,200,50)
     #imagenes
     fondo = pygame.image.load("pyjuego/imagenes/castle2.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
@@ -52,12 +61,9 @@ def jugar():
     #definir rectangulos para usar con  variables
     rect_ingreso = pygame.Rect(500, 580, 200, 40)
     rect_responder = Box(500, 630, 200, 70, "white", "Continuar")
-    #block_pregunta = Box(360,30,620,150,"green", f"{pregunta_actual}")
     block_puntuacion = Box(1000,250,200,80,"gray", f"puntaje: {puntuacion}" )
-
-    #block_correctas = Box(1000,200,200,80, "gray", f"{preguntas_correctas}") # a ser cambiado por una animacion
-    block_salir = Box(600, 640, 450,100,"white", "Salir")
-    block_final = Box(600, 50, 400, 100, "green", "Juego terminado!")
+    block_salir = Box(580, 630, 450,100,"white", "Salir")
+    mensaje_final = font.render("Juego terminado", True, "black")
 
     tiempo = Temporizador(60)
     juego_pausa = False
@@ -130,14 +136,14 @@ def jugar():
                     tabla_resultados.agregar_resultado(
                         nombre_sala=f"Sala {sala}",
                         puntaje_sala= preguntas[pregunta_aleatoria]["valor_puntaje"],
-                        puntaje_total=puntuacion
+                        puntaje_total= puntuacion
                         )
 
                     if preguntas_correctas >= 4 :
                         juego_terminado = True
                         estado_final = True
+
                         guardar_puntaje(nombre_jugador,estado_final,puntuacion)
-                        tabla_resultado_final.agregar_resultado(nombre_jugador, estado_final)
                         
                     else:   
                         pregunta_aleatoria = random.choice(list(preguntas.keys()))
@@ -159,21 +165,19 @@ def jugar():
                 if intentos < 1 or tiempo.terminado:
                     juego_terminado = True
                     estado_final = False
-                    tabla_resultado_final.agregar_resultado(nombre_jugador, False)
                     guardar_puntaje(nombre_jugador,estado_final,puntuacion)
                     
                     
-                
                 block_puntuacion = Box(1000,250, 200, 80, "gray", f"puntaje: {puntuacion}")  # recreate with updated score
                 block_puntuacion.draw(screen)
-                #block_correctas = Box(1000,200,200,80, "gray", f"{preguntas_correctas}")
-                #block_correctas.draw(screen)
                 
 
         else:
-            block_final.draw(screen)
-            tabla_resultados.draw(screen)
-            tabla_resultado_final.draw(screen)
+            screen.blit(mensaje_final, (480,50))
+            re = dibujar_estado(nombre_jugador,estado_final)
+            screen.blit(re[0], (500,100))
+            screen.blit(re[1], (540,180))
+            tabla_resultados.draw(screen,font)
             block_salir.draw(screen)
             
         click = False
@@ -280,9 +284,8 @@ def mostrar_torneo(resultados):
             texto = font.render(f"No superaron sala 1: {', '.join(eliminados_sala1)}", True, (255, 100, 100))
         else:
             texto = font.render("Todos superaron la sala 1!", True, (100, 255, 100))
+
         screen.blit(texto, (100, y))
-
-
         block_salir.draw(screen)
         pygame.display.flip()
         clock.tick(60)
