@@ -7,23 +7,25 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 
 entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
 salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
-musica_menu = pygame.mixer.music.load("pyjuego/sonidos/eugene.mp3")
-pygame.mixer.music.play()
 
-def entrar_sonido():
+def entrar_sonido()-> None:
     entrar_sfx.play()
     pygame.time.wait(int(salir_sfx.get_length() * 1000))
 
-def salir_sonido():
+def salir_sonido()-> None:
     salir_sfx.play()
     pygame.time.wait(int(salir_sfx.get_length() * 1000)) #regresa y convierte segundos en ms para time.wait
 
-def musica_menu():
-    pygame.mixer.music.load("pyjuego/sonidos/eugene.mp3")
+def musica_menu(cancion:int)-> None:
+    if cancion == 1:
+        pygame.mixer.music.load("pyjuego/sonidos/eugene.mp3")
+    else:
+        pygame.mixer.music.load("pyjuego/sonidos/safe_place.mp3")
+    
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
 
-def manejar_musica():
+def manejar_musica()-> None:
     if pygame.mixer.music.get_busy():
         pygame.mixer.music.pause()
     else:
@@ -48,7 +50,7 @@ preguntas = {
      },
      1:{
      "pregunta": "¿Los diccionarios como guardan valores?",
-     "opciones": ["a.en valor llave:valor", "b.con una variable" ,"c.en una lista" ,"d.no guardan"],
+     "opciones": ["a.en llave:valor", "b.con una variable" ,"c.en una lista" ,"d.no guardan"],
      "respuesta": "a",
      "valor_puntaje":10
      },
@@ -65,7 +67,7 @@ preguntas = {
      "valor_puntaje":20
      },
      4:{
-     "pregunta": "¿Qué imprime el siguiente código? print('Hola' * 2)",
+     "pregunta": "¿Qué imprime el siguiente código? print('Hola'* 2)",
      "opciones": ["a.HolaHola", "b.Hola Hola" ,"c.Error" ,"d.Hola2"],
      "respuesta": "a",
      "valor_puntaje":12   
@@ -90,7 +92,7 @@ preguntas = {
      },
      8:{
      "pregunta": "¿Qué tipo de estructura es un diccionario?",
-     "opciones": ["a.indexada", "b.clave-valor" ,"c.str" ,"d.Inmutable"],
+     "opciones": ["a.indexada", "b.clave-valor" ,"c.str" ,"d.ninguna"],
      "respuesta": "b",
      "valor_puntaje":30   
      },
@@ -108,7 +110,7 @@ preguntas = {
      },
      11:{
      "pregunta": "¿Qué se usa para hacer comentarios en una línea en Python?",
-     "opciones": ["a.||", "b.<!-- -->" ,"c.#" ,"d.()"],
+     "opciones": ["a.||", "b.<!---->" ,"c.#" ,"d.()"],
      "respuesta": "c",
      "valor_puntaje":33   
      },
@@ -131,7 +133,7 @@ preguntas = {
      "valor_puntaje":35   
      },
      15:{
-     "pregunta": "¿Qué palabra clave se usa para terminar un ciclo anticipadamente?",
+     "pregunta": "¿Qué palabra clave se usa para terminar un ciclo?",
      "opciones": ["a.continue", "b.exit" ,"c.stop" ,"d.break"],
      "respuesta": "d",
      "valor_puntaje":40   

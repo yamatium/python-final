@@ -1,4 +1,5 @@
 import pygame, random
+
 from configuracion import *
 from objetos.TextInputBox import *
 from objetos.box import Box,dibujar_botones
@@ -7,7 +8,6 @@ from puntuacion import *
 
 #configuracion inicial
 pygame.init()
-pygame.mixer.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 pygame.display.set_caption("wawa")
@@ -29,57 +29,57 @@ fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGH
 
 #objetos a usar
 a = font.render("FINAL", True, "green")
-text_input_box = TextInputBox(650, 150, 400, font)
-group = pygame.sprite.Group(text_input_box)
-rect_puntuacion = Box(40,480,220,100, "white", "puntajes")
-rect_salir = Box(40,600,220,100,"white", "Salir")
-rect_jugar = Box(40,360,220,100,"white", "Jugar")
-rect_musica = Box(1100, 620, 150,70, "white", "musica")
+boton_puntuacion = Box(40,480,220,100, "white", "puntajes")
+boton_salir = Box(40,600,220,100,"white", "Salir")
+boton_jugar = Box(40,360,220,100,"white", "Jugar")
+boton_musica = Box(1100, 620, 150,70, "white", "musica")
+botones = [boton_jugar, boton_puntuacion, boton_musica, boton_salir]
 
-botones = [rect_jugar, rect_puntuacion, rect_musica, rect_salir]
-#variables 
-running = True
 
-def empezar():
+def empezar() -> None:
     jugadores = ingresar_jugadores()
-    if not jugadores :
-        return # exits to the main menu
+    if not jugadores:
+        return  # cancelado al ingresar jugadores, musica del menu no se toca
+    pygame.mixer.music.fadeout(500)
+    musica_menu(2)
     resultados = []
     for i in range(jugadores):
         resultado_jugador = jugar()
         if resultado_jugador is None:
-            return # exits to the main menu
+            break  # cancelado a mitad de partida
         resultados.append(resultado_jugador)
-    mostrar_torneo(resultados)
+    if len(resultados) == jugadores and jugadores > 1:
+        mostrar_torneo(resultados)
+    musica_menu(1)
 
-musica_menu()
 
+
+musica_menu(1)
+running = True
 while running:
     event_list = pygame.event.get()
     for event in event_list:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_m:  #K_SPACE usar para pausar el juego en juego.py pygame.K_SPACE
+            if event.key == pygame.K_m:
                 manejar_musica()
             if event.key == pygame.K_ESCAPE:
                 running = False 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                if rect_musica.collidepoint(event.pos):
+                if boton_musica.collidepoint(event.pos):
                     entrar_sonido()
                     manejar_musica()
-                if rect_puntuacion.collidepoint(event.pos):
-                    rect_puntuacion.sonidoClick()
+                if boton_puntuacion.collidepoint(event.pos):
+                    boton_puntuacion.sonidoClick()
                     puntuacion()
-                if rect_salir.collidepoint(event.pos):
-                    rect_salir.sonidoClick("salir")
+                if boton_salir.collidepoint(event.pos):
+                    boton_salir.sonidoClick("salir")
                     running = False
-                if rect_jugar.collidepoint(event.pos):
-                    pygame.mixer.music.fadeout(500)
+                if boton_jugar.collidepoint(event.pos):
                     entrar_sonido()
                     empezar()
-                    pygame.mixer.music.play(-1)
                 
            
     mx, my = pygame.mouse.get_pos()

@@ -6,7 +6,6 @@ class Temporizador:
         self.tiempo_restante = segundos
         self.ultimo_tick = pygame.time.get_ticks()
         self.terminado = False
-        self.block = Box(1000, 100, 200, 70, "gray", f"Tiempo: {segundos}")
 
     def update(self):
         if not self.terminado:
@@ -20,12 +19,14 @@ class Temporizador:
                 self.terminado = True
 
     def draw(self, screen):
-        #self.block.texto = f"Tiempo: {int(self.tiempo_restante)}"
-        self.block = Box(1000, 100, 200, 70, "gray", f"Tiempo: {int(self.tiempo_restante)}")
-        #self.block.color = "red" if self.tiempo_restante <= 10 else "gray"
+        self.block = Box(2, 300, 170, 60, "gray", f"Tiempo: {int(self.tiempo_restante)}")
+        if self.tiempo_restante <= 10:
+            self.block.color = "red"
+        else:
+            self.block.color = "gray"
         self.block.draw(screen)
 
     def reset(self):
-        self.tiempo_restante = 30
+        self.tiempo_restante = 20
         self.ultimo_tick = pygame.time.get_ticks()
         self.terminado = False

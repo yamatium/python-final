@@ -1,4 +1,5 @@
 import pygame, os
+
 from configuracion import *
 from objetos.box import Box
 from ingresar_datos import *
@@ -35,7 +36,7 @@ def borrar_puntuacion():
     try:
         os.remove("puntuacion.txt")
     except FileNotFoundError:
-        pass  # already deleted, nothing to do
+        pass 
     
 def puntuacion():
     puntajes = cargar_puntuacion()
@@ -44,29 +45,29 @@ def puntuacion():
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
     puntuacionVacia = font.render("No hay puntajes todavia, ve a jugar!", True, "black")
     titulo = font.render("Tabla de puntuaciones", True, "black")
-    block_borrar = Box(100, 650, 200, 60, "grey", "Borrar historial")
-    block_salir = Box(100, 550, 200, 60, "grey", "salir")
-    rect_musica = Box(1100, 620, 150,70, "white", "musica")
 
-    block_subir = Box(1000, 130, 60, 50, "gray", "^")
-    block_bajar = Box(1000, 600, 60, 50, "gray", "v")
-    scroll_offset = 0
-    scroll_speed = 40
-    lista_area = pygame.Rect(0, 110, WINDOW_WIDTH, 470)
-
-    botones = [block_salir, block_borrar, block_subir, block_bajar, rect_musica]
+    boton_borrar = Box(100, 650, 200, 60, "grey", "Borrar historial")
+    boton_salir = Box(100, 550, 200, 60, "grey", "salir")
+    boton_musica = Box(1100, 620, 150,70, "white", "musica")
+    boton_subir = Box(1100, 150, 60, 50, "gray", "^")
+    boton_bajar = Box(1100, 500, 60, 50, "gray", "v")
+    posicion_scroll = 0 # posicion actual de scroll
+    velocidad_scroll = 50 
+    lista_area = pygame.Rect(0, 140, 1280, 470) # define el area a usar scrolling, linea 108
+    botones = [boton_salir, boton_borrar, boton_subir, boton_bajar, boton_musica]
     
     blocks_puntaje = []
-    y = 150
+    y = 170
     for p in puntajes:
         texto = f"Jugador: {p['nombre']} | estado final: {p['estado']} | puntaje: {p['puntaje']}"
-        box = Box(350, y, 600, 60, "gray", texto,draw_bg=False)
+        box = Box(350, y, 700, 60, "gray", texto)
         box.original_y = y
         blocks_puntaje.append(box)
         y += 70
 
-    contenido_alto = len(blocks_puntaje) * 70
-    max_scroll = max(0, contenido_alto - lista_area.height)
+    altura_lista = len(blocks_puntaje) * 80 # altura de lista segun entradas. 70 se corta el ultimo dato
+    #max_scroll = max(0, altura_lista - lista_area.height)  # limite de movimiento y de lista 
+    max_scroll = (altura_lista - lista_area.height) # it just works!,lineas 96 y 100 resguardan error
 
     running = True
     while running:
@@ -78,35 +79,36 @@ def puntuacion():
                     running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if block_borrar.collidepoint(event.pos):
-                        block_borrar.sonidoClick("salir")
+                    if boton_borrar.collidepoint(event.pos):
+                        boton_borrar.sonidoClick("salir")
                         borrar_puntuacion()
                         blocks_puntaje = [] 
                         puntajes = []
-                    if block_salir.collidepoint(event.pos):
-                        block_salir.sonidoClick("salir")
+                    if boton_salir.collidepoint(event.pos):
+                        boton_salir.sonidoClick("salir")
                         running = False
-                    if rect_musica.collidepoint(event.pos):
+                    if boton_musica.collidepoint(event.pos):
                         entrar_sonido()
                         manejar_musica()
-                    if block_subir.collidepoint(event.pos):
-                        scroll_offset -= scroll_speed
-                        scroll_offset = max(0, min(scroll_offset, max_scroll))
-                    if block_bajar.collidepoint(event.pos):
-                        scroll_offset += scroll_speed
-                        scroll_offset = max(0, min(scroll_offset, max_scroll))
-
+                    if boton_subir.collidepoint(event.pos):
+                        posicion_scroll -= velocidad_scroll 
+                        posicion_scroll = max(0, posicion_scroll)
+                        #posicion_scroll = max(0, min(posicion_scroll, max_scroll))#controla que no se suba mas de y
+                        #max (0 , (valor minimo/ posible negativo )) es 0 para que no sea negativo y se escape de la lista
+                    if boton_bajar.collidepoint(event.pos):
+                        posicion_scroll += velocidad_scroll 
+                        posicion_scroll = max(0, min(posicion_scroll, max_scroll))#controla que no se baje mas de y
+        
         mx, my = pygame.mouse.get_pos()
         screen.blit(fondo_escalado, (-50,-100))
-        if not puntajes:
-           screen.blit(puntuacionVacia,(330,400))
-
         screen.blit(titulo, (450,90))
         dibujar_botones(botones, screen, (mx, my))
-            
-        screen.set_clip(lista_area)
+
+        if not puntajes:
+           screen.blit(puntuacionVacia,(330,400))    
+        screen.set_clip(lista_area) # define el area a usar el scrolling
         for block in blocks_puntaje:
-            block.rect.y = block.original_y - scroll_offset
+            block.rect.y = block.original_y - posicion_scroll
             block.draw(screen)
         screen.set_clip(None)
 
