@@ -13,7 +13,6 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("wawa")
 icon = pygame.image.load("assets/images/fred.png")
 pygame.display.set_icon(icon)
-font = pygame.font.SysFont(None, 150)
 
 # imagen de menu
 gatos = []
@@ -28,7 +27,7 @@ fondo = pygame.image.load("pyjuego/imagenes/cloud.jpg").convert()
 fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
 
 #objetos a usar
-a = font.render("FINAL", True, "green")
+a = font_final.render("FINAL", True, "green")
 boton_puntuacion = Box(40,480,220,100, "white", "puntajes")
 boton_salir = Box(40,600,220,100,"white", "Salir")
 boton_jugar = Box(40,360,220,100,"white", "Jugar")

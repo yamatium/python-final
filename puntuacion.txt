@@ -15,3 +15,8 @@ Jugador: wwww | estado final: No Completo | puntaje: 58
 Jugador: cccc | estado final: Completo | puntaje: 143
 Jugador: ssss | estado final: Completo | puntaje: 104
 Jugador: wwww | estado final: No Completo | puntaje: 44
+Jugador: a | estado final: No Completo | puntaje: 0
+Jugador: s | estado final: No Completo | puntaje: 0
+Jugador: s | estado final: No Completo | puntaje: 0
+Jugador: dd | estado final: Completo | puntaje: 84
+Jugador: ddd | estado final: Completo | puntaje: 105

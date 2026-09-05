@@ -2,8 +2,10 @@ import pygame
 
 #pygame.init()
 pygame.mixer.init()
+pygame.font.init()
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
-#font = pygame.font.SysFont(None, 150) font gigante
+font_final = pygame.font.SysFont(None, 150) 
+font = pygame.font.SysFont(None, 50) 
 
 entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
 salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
