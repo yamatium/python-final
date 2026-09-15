@@ -1,7 +1,7 @@
 import pygame
 from configuracion import *
 
-class Box:
+class Caja:
     def __init__(self,x,y,w,h,color, texto=""):
         self.color = color
         self.rect = pygame.Rect(x,y,w,h)

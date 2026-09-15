@@ -45,8 +45,8 @@ COLORS = {
 
 preguntas = {
      0:{
-     "pregunta": "¿Que hace el metodo append?",
-     "opciones": ["a.agrega un elemento al final de la lista", "b.imprime un mensaje en consola" ,"c.nada" ,"d.termina el programa"],
+     "pregunta": "¿Que hace el metodo append, con un elemento?",
+     "opciones": ["a.lo agrega al final de la lista", "b.pinta de azul la pantalla" ,"c.nada" ,"d.termina el programa"],
      "respuesta": "a",
      "valor_puntaje":5
      },
@@ -57,7 +57,7 @@ preguntas = {
      "valor_puntaje":10
      },
      2:{
-     "pregunta": "¿Qué tipo de dato es el resultado de 5 / 2 en Python 3?",
+     "pregunta": "¿Qué tipo de dato es el resultado de, 5 / 2 en Python 3?",
      "opciones": ["a.int", "b.float" ,"c.str" ,"d.bool"],
      "respuesta": "b",
      "valor_puntaje":15
@@ -69,13 +69,13 @@ preguntas = {
      "valor_puntaje":20
      },
      4:{
-     "pregunta": "¿Qué imprime el siguiente código? print('Hola'* 2)",
+     "pregunta": "¿Qué imprime el siguiente código?, print('Hola'* 2)",
      "opciones": ["a.HolaHola", "b.Hola Hola" ,"c.Error" ,"d.Hola2"],
      "respuesta": "a",
      "valor_puntaje":12   
      },
      5:{
-     "pregunta": "¿Qué palabra clave se usa para definir una función en Python?",
+     "pregunta": "¿Qué palabra clave se usa, para definir una función en Python?",
      "opciones": ["a.function", "b.define" ,"c.def" ,"d.fun"],
      "respuesta": "c",
      "valor_puntaje":9   
@@ -87,7 +87,7 @@ preguntas = {
      "valor_puntaje":18   
      },
      7:{
-     "pregunta": "¿Qué devuelve len([1, 2, 3])",
+     "pregunta": "¿Qué devuelve un len de 3 elementos?",
      "opciones": ["a.3", "b.error" ,"c.5" ,"d.0"],
      "respuesta": "a",
      "valor_puntaje":23   
@@ -111,7 +111,7 @@ preguntas = {
      "valor_puntaje":31   
      },
      11:{
-     "pregunta": "¿Qué se usa para hacer comentarios en una línea en Python?",
+     "pregunta": "¿Qué se usa ,para hacer comentarios en una línea en Python?",
      "opciones": ["a.||", "b.<!---->" ,"c.#" ,"d.()"],
      "respuesta": "c",
      "valor_puntaje":33   
@@ -123,7 +123,7 @@ preguntas = {
      "valor_puntaje":3   
      },
      13:{
-     "pregunta": "¿Qué función se usa para convertir un string en un entero?",
+     "pregunta": "¿Qué función se usa para, convertir un string en un entero?",
      "opciones": ["a.int()", "b.float()" ,"c.str()" ,"d.input()"],
      "respuesta": "a",
      "valor_puntaje":26   
@@ -135,13 +135,13 @@ preguntas = {
      "valor_puntaje":35   
      },
      15:{
-     "pregunta": "¿Qué palabra clave se usa para terminar un ciclo?",
+     "pregunta": "¿Qué palabra clave ,se usa para terminar un ciclo?",
      "opciones": ["a.continue", "b.exit" ,"c.stop" ,"d.break"],
      "respuesta": "d",
      "valor_puntaje":40   
      },
      16:{
-     "pregunta": "¿Cuál es el índice del primer elemento en una lista?",
+     "pregunta": "¿Cuál es el índice ,del primer elemento en una lista?",
      "opciones": ["a.0", "b.1" ,"c.-1" ,"d.None"],
      "respuesta": "a",
      "valor_puntaje":44   
@@ -171,5 +171,3 @@ preguntas = {
      "valor_puntaje":100   
      },
 }
-
-#esto es un nested diccionary

@@ -1,18 +1,18 @@
 import pygame, random
 
 from configuracion import *
-from objetos.TextInputBox import *
-from objetos.box import Box,dibujar_botones
+from objetos.Caja import Caja,dibujar_botones
 from juego import *
 from puntuacion import *
+from pantallas_juego import *
 
 #configuracion inicial
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 pygame.display.set_caption("wawa")
-icon = pygame.image.load("assets/images/fred.png")
-pygame.display.set_icon(icon)
+icono = pygame.image.load("pyjuego/imagenes/fred.png")
+pygame.display.set_icon(icono)
 
 # imagen de menu
 gatos = []
@@ -28,10 +28,10 @@ fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGH
 
 #objetos a usar
 a = font_final.render("FINAL", True, "green")
-boton_puntuacion = Box(40,480,220,100, "white", "puntajes")
-boton_salir = Box(40,600,220,100,"white", "Salir")
-boton_jugar = Box(40,360,220,100,"white", "Jugar")
-boton_musica = Box(1100, 620, 150,70, "white", "musica")
+boton_puntuacion = Caja(40,480,220,100, "white", "puntajes")
+boton_salir = Caja(40,600,220,100,"white", "Salir")
+boton_jugar = Caja(40,360,220,100,"white", "Jugar")
+boton_musica = Caja(1100, 620, 150,70, "white", "musica")
 botones = [boton_jugar, boton_puntuacion, boton_musica, boton_salir]
 
 

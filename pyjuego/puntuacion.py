@@ -1,7 +1,7 @@
 import pygame, os
 
 from configuracion import *
-from objetos.box import Box
+from objetos.Caja import Caja
 from ingresar_datos import *
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -45,12 +45,13 @@ def puntuacion():
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
     puntuacionVacia = font.render("No hay puntajes todavia, ve a jugar!", True, "black")
     titulo = font.render("Tabla de puntuaciones", True, "black")
+    formato_puntaje = font.render("Jugador | estado final | puntaje", True, "black")
 
-    boton_borrar = Box(100, 650, 200, 60, "grey", "Borrar historial")
-    boton_salir = Box(100, 550, 200, 60, "grey", "salir")
-    boton_musica = Box(1100, 620, 150,70, "white", "musica")
-    boton_subir = Box(1100, 150, 60, 50, "gray", "^")
-    boton_bajar = Box(1100, 500, 60, 50, "gray", "v")
+    boton_borrar = Caja(40, 650, 200, 60, "grey", "Borrar historial")
+    boton_salir = Caja(40, 550, 200, 60, "grey", "salir")
+    boton_musica = Caja(1100, 620, 150,70, "white", "musica")
+    boton_subir = Caja(1100, 150, 60, 50, "gray", "^")
+    boton_bajar = Caja(1100, 500, 60, 50, "gray", "v")
     posicion_scroll = 0 # posicion actual de scroll
     velocidad_scroll = 50 
     lista_area = pygame.Rect(0, 140, 1280, 470) # define el area a usar scrolling, linea 108
@@ -59,8 +60,8 @@ def puntuacion():
     blocks_puntaje = []
     y = 170
     for p in puntajes:
-        texto = f"Jugador: {p['nombre']} | estado final: {p['estado']} | puntaje: {p['puntaje']}"
-        box = Box(350, y, 700, 60, "gray", texto)
+        texto = f"{p['nombre']} | {p['estado']} | {p['puntaje']}"
+        box = Caja(350, y, 700, 60, "gray", texto)
         box.original_y = y
         blocks_puntaje.append(box)
         y += 70
@@ -101,11 +102,13 @@ def puntuacion():
         
         mx, my = pygame.mouse.get_pos()
         screen.blit(fondo_escalado, (-50,-100))
-        screen.blit(titulo, (450,90))
+        #screen.blit(titulo, (450,90))
+        screen.blit(titulo, (470,60))
+        screen.blit(formato_puntaje, (420,100))
         dibujar_botones(botones, screen, (mx, my))
 
         if not puntajes:
-           screen.blit(puntuacionVacia,(330,400))    
+           screen.blit(puntuacionVacia,(330,380))    
         screen.set_clip(lista_area) # define el area a usar el scrolling
         for block in blocks_puntaje:
             block.rect.y = block.original_y - posicion_scroll

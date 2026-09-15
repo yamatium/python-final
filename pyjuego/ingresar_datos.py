@@ -1,6 +1,6 @@
 import pygame
 from configuracion import *
-from objetos.box import *
+from objetos.Caja import *
 
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -34,18 +34,18 @@ def ingreso_datos():
 
     titulo = font.render("Ingresa tu nombre", True, "black")
     lineas_instrucciones = [
-    "Son 4 preguntas",
+    "Son 4 preguntas a responder ",
     "2 intentos por pregunta para elegir la opcion correcta",
     "m = pausar musica",
     "p/barra espaciadora = pausar el juego"]
 
-    boton_continuar = Box(500, 600, 200, 70, "white", "Continuar")
-    boton_salir = Box(80, 600, 200, 70, "white", "Salir")
+    boton_continuar = Caja(450, 620, 200, 70, "white", "Continuar")
+    boton_salir = Caja(80, 620, 200, 70, "white", "Salir")
     botones = [boton_salir,boton_continuar]
 
     color_active = "white"
     color_passive = (100, 100, 100)
-    rect_ingreso = pygame.Rect(450, 100, 220, 40)
+    rect_ingreso = pygame.Rect(470, 100, 220, 40)
     texto_usuario = ''
     texto_activo = False
 
@@ -81,12 +81,13 @@ def ingreso_datos():
 
         mx, my = pygame.mouse.get_pos()
         screen.blit(fondo_escalado, (-50,-100))
-        screen.blit(titulo, (400,50))
-        y = 250
+        screen.blit(titulo, (430,50))
+        y = 200
+        x = 250
         for linea in lineas_instrucciones:
             superficie_linea = font.render(linea, True, "black")
-            screen.blit(superficie_linea, (250, y))
-            y += 40
+            screen.blit(superficie_linea, (x, y))
+            y += 60
         dibujar_botones(botones, screen, (mx, my))
 
         color_nombre = color_active if texto_activo else color_passive
@@ -107,9 +108,9 @@ def ingresar_jugadores():
     titulo = font.render("Ingresa cantidad de jugadores", True, "black")
     cantidad = font.render("Minimo 1, maximo 10",True, "black")
 
-    boton_continuar = Box(500, 600, 200, 70, "white", "Continuar")
-    boton_musica = Box(1100, 620, 150,70, "white", "musica")
-    boton_salir = Box(100, 600, 200, 70, "white", "Salir")
+    boton_continuar = Caja(500, 620, 200, 70, "white", "Continuar")
+    boton_musica = Caja(1100, 620, 150,70, "white", "musica")
+    boton_salir = Caja(100, 620, 200, 70, "white", "Salir")
     rect_ingreso_numero = pygame.Rect(500, 400, 200, 40)
 
     cant_jugadores = ''

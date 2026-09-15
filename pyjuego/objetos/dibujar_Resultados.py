@@ -1,5 +1,5 @@
 import pygame
-from objetos.box import Box
+#from objetos.Caja import Caja
 
 class dibujar_Resultados:
     def __init__(self, x, y,w,h):
@@ -16,7 +16,7 @@ class dibujar_Resultados:
             str(puntaje_sala),
             str(puntaje_total),])
 
-    def draw(self, surface, font):
+    def dibujar(self, surface, font):
         data = [self.columnas] + self.resultados_salas
         ancho_columna = [self.w, self.w + 80, self.w + 80]
         fila = 0

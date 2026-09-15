@@ -1,6 +1,6 @@
 import pygame
 
-from objetos.box import *
+from objetos.Caja import *
 from configuracion import *
 
 class Temporizador:
@@ -8,18 +8,18 @@ class Temporizador:
         self.tiempo_restante = segundos
         self.ultimo_tick = pygame.time.get_ticks()
         self.terminado = False
+        self.bandera_pausa = False
 
-    def update(self):
+    def actualizar(self) -> None:
         if not self.terminado:
             ahora = pygame.time.get_ticks()
             pasado = (ahora - self.ultimo_tick) / 1000
             self.tiempo_restante -= pasado 
             self.ultimo_tick = ahora
-
             if self.tiempo_restante <= 0:
                 self.terminado = True
 
-    def draw(self, screen):
+    def dibujar(self, screen) -> None:
         if self.tiempo_restante <= 11:
             color_fondo = "red"
         else:
@@ -27,7 +27,7 @@ class Temporizador:
         caja = font.render(f"Tiempo: {int(self.tiempo_restante)}", True, "black",color_fondo)
         screen.blit(caja, (2,300))
         
-    def reset(self):
+    def resetear(self)-> None:
         self.tiempo_restante = 20
         self.ultimo_tick = pygame.time.get_ticks()
         self.terminado = False
