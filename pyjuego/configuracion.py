@@ -1,15 +1,15 @@
 import pygame
 
-#pygame.init()
 pygame.mixer.init()
 pygame.font.init()
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
-font_final = pygame.font.SysFont(None, 150) 
-font = pygame.font.SysFont(None, 50) 
+font_final = pygame.font.SysFont(None, 150) #sacar variables globales
+font = pygame.font.SysFont(None, 50) #sacar variables globales
 
 entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
 salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
 
+#hacer un archivo de modulo de sonido, manejo_sonido.py
 def entrar_sonido()-> None:
     entrar_sfx.play()
     pygame.time.wait(int(salir_sfx.get_length() * 1000))

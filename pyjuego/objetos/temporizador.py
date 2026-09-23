@@ -1,7 +1,7 @@
 import pygame
 
-from objetos.Caja import *
-from configuracion import *
+from .Caja import *
+from pyjuego.configuracion import *
 
 class Temporizador:
     def __init__(self, segundos):

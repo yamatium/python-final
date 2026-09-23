@@ -1,7 +1,8 @@
 import pygame
 
-from objetos.Caja import *
-from configuracion import *
+from .objetos.Caja import *
+from .configuracion import *
+from .diccionarios.boton import *
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
@@ -11,8 +12,8 @@ def respuesta_correcta() -> None:
     #clock = pygame.time.Clock()
 
     # convert cuando no necesitas transparencia, convert_alpha cuando si
-    boton_musica = Caja(1100, 620, 150,70, "white", "musica")
-    boton_salir = Caja(450, 600, 300,80,"white", "continuar")
+    boton_musica = crear_boton(1100, 620, 150,70, None, "musica")
+    boton_salir = crear_boton(450, 600, 300,80,"white", "continuar")
     botones = [boton_musica,boton_salir]
     bien = pygame.image.load("pyjuego/imagenes/thumbs-up.png").convert()
     bien_scale = pygame.transform.scale(bien, (498,390))
@@ -40,9 +41,9 @@ def respuesta_correcta() -> None:
                     running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if boton_salir.collidepoint(event.pos):
+                    if colision(boton_salir,event.pos):
                         running = False
-                    if boton_musica.collidepoint(event.pos):
+                    if colision(boton_musica, event.pos):
                         entrar_sonido()
                         manejar_musica()
 
@@ -54,7 +55,7 @@ def respuesta_correcta() -> None:
         screen.blit(izquierda_scale, (x,100))
         screen.blit(derecha_scale, (z,100))
 
-        dibujar_botones(botones,screen,(mx,my))
+        dibujar_botonesd(botones,screen,(mx,my))
         x -= 0.6
         z += 0.6
         
@@ -62,13 +63,13 @@ def respuesta_correcta() -> None:
         clock.tick(60)
 
 
-
+#rehacer la funcion , con funciones caseras
 def mostrar_torneo(resultados) -> None:
 
     fondo = pygame.image.load("pyjuego/imagenes/forest.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
-    boton_musica = Caja(1100, 620, 150,70, "white", "musica")
-    boton_salir = Caja(400, 600, 450,100,"white", "Salir")
+    boton_musica = crear_boton(1100, 620, 150,70, "white", "musica")
+    boton_salir = crear_boton(400, 600, 450,100,"white", "Salir")
 
     botones = [boton_musica,boton_salir]
     # 1. mayor puntaje
@@ -95,9 +96,9 @@ def mostrar_torneo(resultados) -> None:
                     running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if boton_salir.collidepoint(event.pos):
+                    if colision(boton_salir, event.pos):
                         running = False
-                if boton_musica.collidepoint(event.pos):
+                if colision(boton_musica, event.pos):
                         entrar_sonido()
                         manejar_musica()
 
@@ -112,6 +113,6 @@ def mostrar_torneo(resultados) -> None:
         posiciones = [(400, 40),(400, 240),(400, 290),(400, 340)]  
         for i in range(4):
             screen.blit(dibujar[i], (posiciones[i]))
-        dibujar_botones(botones,screen,(mx,my))
+        dibujar_botonesd(botones,screen,(mx,my))
         pygame.display.flip()
         clock.tick(60)

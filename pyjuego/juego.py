@@ -1,12 +1,13 @@
 import pygame
 import random
 
-from puntuacion import *
-from configuracion import *
-from objetos.Caja import Caja
-from objetos.dibujar_Resultados import *
-from objetos.temporizador import *
-from pantallas_juego import *
+from .puntuacion import *
+from .configuracion import *
+from .objetos.Caja import Caja
+from .objetos.dibujar_Resultados import *
+from .objetos.temporizador import *
+from .pantallas_juego import *
+from .diccionarios.boton import *
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
@@ -38,10 +39,8 @@ def limpiar_respuesta():
     respuesta = ""
     return respuesta
 
-
 def formatear_texto(texto):
     lineas = texto.split(",")
-
     return lineas
 
 def dibujar_pregunta(pregunta, x,y) :
@@ -49,6 +48,21 @@ def dibujar_pregunta(pregunta, x,y) :
         linea = font.render(linea, True, "black")
         screen.blit(linea, (x, y))
         y += 60
+
+def crear_botones_opciones(pregunta_aleatoria) -> list:
+    cantidad = 4
+    lista = []
+    opciones = preguntas[pregunta_aleatoria]["opciones"]
+    posiciones = [(250, 400), (700, 400), (250, 510), (700, 510)]
+    ancho = 150
+    alto = 100
+
+    for i in range(cantidad):
+        x,y = posiciones[i]
+        boton = crear_boton(x,y,ancho,alto, None, opciones[i])
+        lista.append(boton)
+    return lista
+ 
 
 def jugar():
     color_activo = (255, 255, 255)
@@ -81,10 +95,24 @@ def jugar():
     #definir rectangulos para usar con  variables
     rect_ingreso = pygame.Rect(500, 580, 200, 40)
     rect_responder = Caja(500, 630, 200, 70, "white", "Continuar")
-    boton_salir = Caja(480, 610, 250,80,"white", "Salir")
+    boton_salir = crear_boton(480, 610, 250,80,"white", "Salir")
+
+    #opciones = preguntas[pregunta_aleatoria]["opciones"]
+    #opciones[i]
+    #boton_a = crear_boton(250, 330, 150,100, None, preguntas[pregunta_aleatoria]["opciones"][0])
+    #boton_b = crear_boton(700, 330, 150,100, None, preguntas[pregunta_aleatoria]["opciones"][1])
+    #boton_c = crear_boton(250, 430, 150,100, None, preguntas[pregunta_aleatoria]["opciones"][2])
+    #boton_d = crear_boton(700, 430, 150,100, None, preguntas[pregunta_aleatoria]["opciones"][3])
+    botones = crear_botones_opciones(pregunta_aleatoria)
+
+    #botones = [boton_a,boton_b,boton_c,boton_d]
+
+
     puntuacion_actual = font.render(f"puntaje: {puntuacion}", True, "black")
     intentos_actual = font.render(f"Intentos: {intentos}", True, "black")
     mensaje_final = font.render("Juego terminado", True, "black")
+
+
 
     tiempo = Temporizador(20)
     running = True
@@ -114,7 +142,7 @@ def jugar():
                         respuesta_final = responder_pregunta(respuesta)
                         respuesta = limpiar_respuesta()
                 else:
-                    if boton_salir.collidepoint(event.pos):
+                    if colision(boton_salir, event.pos):
                         running = False
 
         screen.blit(fondo_escalado, (-50,-100))
@@ -128,7 +156,8 @@ def jugar():
                 screen.blit(puntuacion_actual, (2, 400))
                 screen.blit(intentos_actual,(2,100))
 
-                dibujar_opciones(screen, pregunta_aleatoria)
+                #dibujar_opciones(screen, pregunta_aleatoria)
+                dibujar_botonesd(botones,screen, (mx,my))
                 tiempo.dibujar(screen)
 
                 pygame.draw.rect(screen, color_nombre, rect_ingreso)
@@ -157,7 +186,9 @@ def jugar():
                         pregunta_aleatoria = random.choice(list(preguntas.keys()))
                         pregunta_formateada = formatear_texto(preguntas[pregunta_aleatoria]["pregunta"])
                         dibujar_pregunta(pregunta_formateada,400,50)
-                        dibujar_opciones(screen, pregunta_aleatoria)
+                        botones = crear_botones_opciones(pregunta_aleatoria)
+                        dibujar_botonesd(botones,screen, (mx,my))
+                        #dibujar_opciones(screen, pregunta_aleatoria)
                         pygame.draw.rect(screen, color_nombre, rect_ingreso)
                         screen.blit(superficie_texto, (rect_ingreso.x + 5, rect_ingreso.y + 5))
                         intentos = 2
@@ -186,7 +217,7 @@ def jugar():
             screen.blit(resultado_jugador[0], (500,100))
             screen.blit(resultado_jugador[1], (540,180))
             tabla_resultados.dibujar(screen,font)
-            dibujar_botones(boton_salir, screen, (mx, my))
+            dibujar_botonesd(boton_salir, screen, (mx, my))
             
         pygame.display.flip()
         clock.tick(60)

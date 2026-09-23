@@ -1,14 +1,8 @@
-Jugador: bingus | estado final: Completo | puntaje: 121
-Jugador: wad | estado final: No Completo | puntaje: 117
-Jugador: ddaw | estado final: No Completo | puntaje: 99
-Jugador: ddaw | estado final: No Completo | puntaje: 32
-Jugador: dddd | estado final: No Completo | puntaje: 0
-Jugador: ddwad | estado final: Completo | puntaje: 106
-Jugador: dddd | estado final: Completo | puntaje: 133
-Jugador: ddd | estado final: No Completo | puntaje: 92
-Jugador: dddd | estado final: Completo | puntaje: 73
-Jugador: ddd | estado final: Completo | puntaje: 151
-Jugador: cccc | estado final: Completo | puntaje: 221
-Jugador: wwww | estado final: Completo | puntaje: 184
-Jugador: cccc | estado final: No Completo | puntaje: 55
-Jugador: ddwd | estado final: No Completo | puntaje: 0
+Jugador: d | estado final: Completo | puntaje: 155
+Jugador: d | estado final: No Completo | puntaje: 0
+Jugador: dd | estado final: Completo | puntaje: 90
+Jugador: wwww | estado final: Completo | puntaje: 113
+Jugador: ddd | estado final: Completo | puntaje: 188
+Jugador: d | estado final: No Completo | puntaje: 0
+Jugador: ddd | estado final: No Completo | puntaje: 0
+Jugador: dwdw | estado final: No Completo | puntaje: 0

@@ -1,10 +1,11 @@
 import pygame, os
 
-from configuracion import *
-from objetos.Caja import Caja
-from ingresar_datos import *
+from .configuracion import *
+from .objetos.Caja import Caja
+from .diccionarios.boton import *
+from .ingresar_datos import *
 
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)) # traer desde configuracion una variable local
 clock = pygame.time.Clock()
 
 def guardar_puntaje(nombre, estado_final,puntaje):
@@ -47,11 +48,12 @@ def puntuacion():
     titulo = font.render("Tabla de puntuaciones", True, "black")
     formato_puntaje = font.render("Jugador | estado final | puntaje", True, "black")
 
-    boton_borrar = Caja(40, 650, 200, 60, "grey", "Borrar historial")
-    boton_salir = Caja(40, 550, 200, 60, "grey", "salir")
-    boton_musica = Caja(1100, 620, 150,70, "white", "musica")
-    boton_subir = Caja(1100, 150, 60, 50, "gray", "^")
-    boton_bajar = Caja(1100, 500, 60, 50, "gray", "v")
+    boton_salir = crear_boton(40, 550, 240, 60, "grey", "salir")
+    boton_borrar = crear_boton(40, 650, 240, 60, "grey", "borrar tabla") # la letra esta muy grande
+    boton_musica = crear_boton(1100, 620, 150,70, None, "musica")
+    boton_subir = crear_boton(1100, 150, 60, 50, "gray", "^")
+    boton_bajar = crear_boton(1100, 500, 60, 50, "gray", "v")
+
     posicion_scroll = 0 # posicion actual de scroll
     velocidad_scroll = 50 
     lista_area = pygame.Rect(0, 140, 1280, 470) # define el area a usar scrolling, linea 108
@@ -80,32 +82,31 @@ def puntuacion():
                     running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if boton_borrar.collidepoint(event.pos):
-                        boton_borrar.sonidoClick("salir")
+                    if colision(boton_borrar,event.pos):
+                        salir_sonido()
                         borrar_puntuacion()
                         blocks_puntaje = [] 
                         puntajes = []
-                    if boton_salir.collidepoint(event.pos):
-                        boton_salir.sonidoClick("salir")
+                    if colision(boton_salir, event.pos):
+                        salir_sonido()
                         running = False
-                    if boton_musica.collidepoint(event.pos):
+                    if colision(boton_musica, event.pos):
                         entrar_sonido()
                         manejar_musica()
-                    if boton_subir.collidepoint(event.pos):
+                    if colision(boton_subir, event.pos):
                         posicion_scroll -= velocidad_scroll 
                         posicion_scroll = max(0, posicion_scroll)
                         #posicion_scroll = max(0, min(posicion_scroll, max_scroll))#controla que no se suba mas de y
                         #max (0 , (valor minimo/ posible negativo )) es 0 para que no sea negativo y se escape de la lista
-                    if boton_bajar.collidepoint(event.pos):
+                    if colision(boton_bajar, event.pos):
                         posicion_scroll += velocidad_scroll 
                         posicion_scroll = max(0, min(posicion_scroll, max_scroll))#controla que no se baje mas de y
         
         mx, my = pygame.mouse.get_pos()
         screen.blit(fondo_escalado, (-50,-100))
-        #screen.blit(titulo, (450,90))
         screen.blit(titulo, (470,60))
         screen.blit(formato_puntaje, (420,100))
-        dibujar_botones(botones, screen, (mx, my))
+        dibujar_botonesd(botones, screen, (mx, my))
 
         if not puntajes:
            screen.blit(puntuacionVacia,(330,380))    
