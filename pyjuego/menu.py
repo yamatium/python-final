@@ -1,7 +1,6 @@
 import pygame, random
 
 from .configuracion import *
-from .objetos.Caja import *
 from .juego import *
 from .puntuacion import *
 from .pantallas_juego import *

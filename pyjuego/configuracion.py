@@ -9,6 +9,11 @@ font = pygame.font.SysFont(None, 50) #sacar variables globales
 entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
 salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
 
+def crear_fuente_c(tamanio: int):
+    #tamanio = 50
+    fuente = pygame.font.SysFont(None, tamanio)
+    return fuente
+
 #hacer un archivo de modulo de sonido, manejo_sonido.py
 def entrar_sonido()-> None:
     entrar_sfx.play()

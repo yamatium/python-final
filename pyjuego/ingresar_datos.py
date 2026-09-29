@@ -1,6 +1,5 @@
 import pygame
 from .configuracion import *
-from .objetos.Caja import *
 from .diccionarios.boton import *
 
 pygame.init()

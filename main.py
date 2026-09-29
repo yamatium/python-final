@@ -1,5 +1,5 @@
 from pyjuego import menu
-from pyjuego.diccionarios.boton import *
+#from pyjuego.diccionarios.boton import *
 menu.iniciar()
 
 

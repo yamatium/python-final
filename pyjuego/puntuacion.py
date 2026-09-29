@@ -1,7 +1,6 @@
 import pygame, os
 
 from .configuracion import *
-from .objetos.Caja import Caja
 from .diccionarios.boton import *
 from .ingresar_datos import *
 
@@ -38,6 +37,12 @@ def borrar_puntuacion():
         os.remove("puntuacion.txt")
     except FileNotFoundError:
         pass 
+
+def aplicar_scroll(block, posicion_scroll):
+    y_scroll = block["y_base"] - posicion_scroll
+    block["rectangulo"].y = y_scroll
+    block["texto_rectangulo"].center = block["rectangulo"].center
+    return block
     
 def puntuacion():
     puntajes = cargar_puntuacion()
@@ -63,8 +68,8 @@ def puntuacion():
     y = 170
     for p in puntajes:
         texto = f"{p['nombre']} | {p['estado']} | {p['puntaje']}"
-        box = Caja(350, y, 700, 60, "gray", texto)
-        box.original_y = y
+        box = crear_boton(350, y, 700,60,"gray", texto)
+        box["y_base"] = y
         blocks_puntaje.append(box)
         y += 70
 
@@ -111,9 +116,10 @@ def puntuacion():
         if not puntajes:
            screen.blit(puntuacionVacia,(330,380))    
         screen.set_clip(lista_area) # define el area a usar el scrolling
+
         for block in blocks_puntaje:
-            block.rect.y = block.original_y - posicion_scroll
-            block.draw(screen)
+            block = aplicar_scroll(block, posicion_scroll)
+            dibujar_botonesd(block, screen, (mx, my))
         screen.set_clip(None)
 
         pygame.display.flip()
