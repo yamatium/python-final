@@ -33,3 +33,9 @@ Jugador: ddd | estado final: Completo | puntaje: 82
 Jugador: dwd | estado final: Completo | puntaje: 83
 Jugador: dd | estado final: No Completo | puntaje: 0
 Jugador: cccc | estado final: Completo | puntaje: 108
+Jugador: ddd | estado final: Completo | puntaje: 108
+Jugador: dd | estado final: Completo | puntaje: 74
+Jugador: awd | estado final: No Completo | puntaje: 0
+Jugador: dd | estado final: No Completo | puntaje: 12
+Jugador: da | estado final: No Completo | puntaje: 33
+Jugador: wd | estado final: No Completo | puntaje: 0

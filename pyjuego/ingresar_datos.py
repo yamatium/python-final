@@ -37,8 +37,7 @@ def ingreso_datos():
     lineas_instrucciones = [
     "Son 4 preguntas a responder ",
     "2 intentos por pregunta para elegir la opcion correcta",
-    "m = pausar musica",
-    "p/barra espaciadora = pausar el juego"]
+    "m = pausar musica"]
 
     boton_continuar = crear_boton(450, 620, 200, 70, "white", "Continuar")
     boton_salir = crear_boton(80, 620, 200, 70, "white", "Salir")
@@ -102,7 +101,7 @@ def ingreso_datos():
     return resultado
 
 
-def ingresar_jugadores():
+def ingresar_jugadores() -> int | None:
 
     fondo = pygame.image.load("pyjuego/imagenes/campo.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
@@ -150,6 +149,7 @@ def ingresar_jugadores():
                         entrar_sonido()
                         manejar_musica()
                     if colision(boton_salir, event.pos):
+                        salir_sonido()
                         running = False
 
         screen.blit(fondo_escalado, (-50,-100))

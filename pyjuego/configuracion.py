@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 pygame.mixer.init()
 pygame.font.init()
@@ -8,6 +8,11 @@ font = pygame.font.SysFont(None, 50) #sacar variables globales
 
 entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
 salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
+
+def elejir_numero(inicio:int , fin: int):
+    numero_elejido = random.randint(inicio,fin)
+    return numero_elejido
+
 
 def crear_fuente_c(tamanio: int):
     #tamanio = 50

@@ -1,13 +1,12 @@
 import pygame
 import random
 
-from .puntuacion import *
-from .configuracion import *
-
+from pyjuego.puntuacion import *
+from pyjuego.configuracion import *
+from pyjuego.diccionarios.boton import *
+from pyjuego.diccionarios.cronometro import *
+from pyjuego.diccionarios.resultados_juego import *
 from .pantallas_juego import *
-from .diccionarios.boton import *
-from .diccionarios.cronometro import *
-from .diccionarios.resultados_juego import *
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
@@ -177,6 +176,7 @@ def jugar():
                     juego_terminado = True
                     estado_final = False
                     guardar_puntaje(nombre_jugador,estado_final,puntuacion)
+                    
                     
                 puntuacion_actual = font.render(f"puntaje: {puntuacion}", True, "black")
                 intentos_actual = font.render(f"Intentos: {intentos}", True, "black")  

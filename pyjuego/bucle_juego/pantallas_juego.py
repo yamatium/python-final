@@ -1,15 +1,12 @@
 import pygame
 
-from .configuracion import *
-from .diccionarios.boton import *
+from pyjuego.configuracion import *
+from pyjuego.diccionarios.boton import *
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 
 def respuesta_correcta() -> None:
-    #screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    #clock = pygame.time.Clock()
-
     # convert cuando no necesitas transparencia, convert_alpha cuando si
     boton_musica = crear_boton(1100, 620, 150,70, None, "musica")
     boton_salir = crear_boton(450, 600, 300,80,"white", "continuar")
