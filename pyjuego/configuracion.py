@@ -9,12 +9,16 @@ font = pygame.font.SysFont(None, 50) #sacar variables globales
 entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
 salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
 
+def crear_superficie_pantalla()-> pygame.Surface:
+    return pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
 def elejir_numero(inicio:int , fin: int):
     numero_elejido = random.randint(inicio,fin)
     return numero_elejido
 
+#hacer funcion que regrese dimension de pantalla
 
-def crear_fuente_c(tamanio: int):
+def crear_fuente(tamanio: int):
     #tamanio = 50
     fuente = pygame.font.SysFont(None, tamanio)
     return fuente

@@ -4,37 +4,46 @@ from .configuracion import *
 from .diccionarios.boton import *
 from .ingresar_datos import *
 
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)) # traer desde configuracion una variable local
+pantalla = crear_superficie_pantalla()
 clock = pygame.time.Clock()
+fuente = crear_fuente(50)
 
-def guardar_puntaje(nombre, estado_final,puntaje):
+def guardar_puntaje(nombre:str, estado_final: bool,puntaje) -> None:
+    #guarda el resultado del jugador en un archivo csv
     estado_final = "Completo" if estado_final else "No Completo"
-    with open("puntuacion.txt", "a") as archivo:
-        archivo.write(f"Jugador: {nombre} | estado final: {estado_final} | puntaje: {puntaje}\n")
+    with open("puntuacion.csv", "a") as archivo:
+        archivo.write(f"{nombre},{estado_final},{puntaje}\n")
 
-def obtener_puntaje(p): # para ordenar puntuacion al cargarlos 
-    return int(p["puntaje"])
+def ordenar_puntajes(lista:list)->None:
+    #ordenar la puntuacion con algoritmo de burbuja
+    recorrido = len(lista)
 
-def cargar_puntuacion():
+    for i in range(recorrido-1):
+        for j in range(recorrido-i-1):
+            if lista[j]["puntaje"] < lista[j+1]["puntaje"]:
+                temp = lista[j]
+                lista[j] = lista[j+1]
+                lista[j+1] = temp
+    return lista
+
+def cargar_puntuacion()-> list:
     puntuacion = []
     try:
-        with open("puntuacion.txt", "r") as archivo:
+        with open("puntuacion.csv", "r") as archivo:
             for linea in archivo:
-                # "Jugador: b | estado final: Completo | puntaje: 91"
-                partes = linea.strip().split(" | ")  # strip saca el \n invisible
-                nombre = partes[0].replace("Jugador: ", "")
-                estado = partes[1].replace("estado final: ", "")
-                puntaje = partes[2].replace("puntaje: ", "")
-                puntuacion.append({"nombre": nombre, "estado": estado, "puntaje": puntaje}) # lo append como diccionario
-                #{"nombre": "b",    "estado": "Completo",   "puntaje": "91"}
-                puntuacion.sort(key=obtener_puntaje, reverse=True)
+                partes = linea.strip().split(",")  # strip saca el \n invisible
+                nombre = partes[0]
+                estado = partes[1]
+                puntaje = int(partes[2]) #casteo str a int
+                puntuacion.append({"nombre": nombre, "estado": estado, "puntaje": puntaje}) 
+            puntuacion_ordenada = ordenar_puntajes(puntuacion)
     except FileNotFoundError:
         print("Archivo no encontrado")
-    return puntuacion
+    return puntuacion_ordenada # devuelve una lista de diccionarios
 
-def borrar_puntuacion():
+def borrar_puntuacion() -> None:
     try:
-        os.remove("puntuacion.txt")
+        os.remove("puntuacion.csv")
     except FileNotFoundError:
         pass 
 
@@ -49,12 +58,12 @@ def puntuacion():
 
     fondo = pygame.image.load("pyjuego/imagenes/arbol.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
-    puntuacionVacia = font.render("No hay puntajes todavia, ve a jugar!", True, "black")
-    titulo = font.render("Tabla de puntuaciones", True, "black")
-    formato_puntaje = font.render("Jugador | estado final | puntaje", True, "black")
+    puntuacionVacia = fuente.render("No hay puntajes todavia, ve a jugar!", True, "black")
+    titulo = fuente.render("Tabla de puntuaciones", True, "black")
+    formato_puntaje = fuente.render("Jugador | estado final | puntaje", True, "black")
 
     boton_salir = crear_boton(40, 550, 240, 60, "grey", "salir")
-    boton_borrar = crear_boton(40, 650, 240, 60, "grey", "borrar tabla") # la letra esta muy grande
+    boton_borrar = crear_boton(40, 650, 240, 60, "grey", "borrar tabla")
     boton_musica = crear_boton(1100, 620, 150,70, None, "musica")
     boton_subir = crear_boton(1100, 150, 60, 50, "gray", "^")
     boton_bajar = crear_boton(1100, 500, 60, 50, "gray", "v")
@@ -63,7 +72,8 @@ def puntuacion():
     velocidad_scroll = 50 
     lista_area = pygame.Rect(0, 140, 1280, 470) # define el area a usar scrolling, linea 108
     botones = [boton_salir, boton_borrar, boton_subir, boton_bajar, boton_musica]
-    
+
+    #hacer funcion
     blocks_puntaje = []
     y = 170
     for p in puntajes:
@@ -72,6 +82,7 @@ def puntuacion():
         box["y_base"] = y
         blocks_puntaje.append(box)
         y += 70
+        
 
     altura_lista = len(blocks_puntaje) * 80 # altura de lista segun entradas. 70 se corta el ultimo dato
     #max_scroll = max(0, altura_lista - lista_area.height)  # limite de movimiento y de lista 
@@ -87,6 +98,7 @@ def puntuacion():
                     running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    #hacer manejo de evento casero, como menu.py
                     if colision(boton_borrar,event.pos):
                         salir_sonido()
                         borrar_puntuacion()
@@ -108,19 +120,19 @@ def puntuacion():
                         posicion_scroll = max(0, min(posicion_scroll, max_scroll))#controla que no se baje mas de y
         
         mx, my = pygame.mouse.get_pos()
-        screen.blit(fondo_escalado, (-50,-100))
-        screen.blit(titulo, (470,60))
-        screen.blit(formato_puntaje, (420,100))
-        dibujar_botonesd(botones, screen, (mx, my))
+        pantalla.blit(fondo_escalado, (-50,-100))
+        pantalla.blit(titulo, (470,60))
+        pantalla.blit(formato_puntaje, (420,100))
+        dibujar_botonesd(botones, pantalla, (mx, my))
 
         if not puntajes:
-           screen.blit(puntuacionVacia,(330,380))    
-        screen.set_clip(lista_area) # define el area a usar el scrolling
+           pantalla.blit(puntuacionVacia,(330,380))    
+        pantalla.set_clip(lista_area) # define el area a usar el scrolling
 
         for block in blocks_puntaje:
             block = aplicar_scroll(block, posicion_scroll)
-            dibujar_botonesd(block, screen, (mx, my))
-        screen.set_clip(None)
+            dibujar_botonesd(block, pantalla, (mx, my))
+        pantalla.set_clip(None)
 
         pygame.display.flip()
         clock.tick(60)

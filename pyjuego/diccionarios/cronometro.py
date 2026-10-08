@@ -35,7 +35,6 @@ def dibujar_cronometro(cronometro:dict, pantalla) -> None:
 
 def resetear_cronometro(cronometro:dict)-> None:
      cronometro["tiempo_restante"] = 20
-     #cronometro["pygame_tiempo_tick"] = pygame.time.get_ticks()
      cronometro["pygame_tiempo_tick"] = pygame_traer_tick()
      cronometro["tiempo_terminado"] = False
      

@@ -5,35 +5,49 @@ from .diccionarios.boton import *
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
-font = pygame.font.SysFont(None, 50)
+#font = pygame.font.SysFont(None, 50)
+fuente = crear_fuente(50)
 
-#sacar esto, hacer con hashcode
-def validar_letra(caracter, estado="ingreso") -> bool:
+
+def validar_ascii_letra(caracter)-> bool:
+    #valida que el rango sea de la a a la z 
+    valor_ascii_minimo = 97
+    valor_ascii_maximo = 122
+
+    return valor_ascii_minimo <= ord(caracter) <= valor_ascii_maximo #revisar si se puede regresar asi,(programacion 2) sino cambiar con un if return o while
+
+def validar_ascii_numero(caracter)-> bool:
+    #valida que el rango sea del 1 al 9 
+    valor_ascii_minimo = 48
+    valor_ascii_maximo = 57
+
+    return valor_ascii_minimo <= ord(caracter) <= valor_ascii_maximo #revisar si se puede regresar asi,(programacion 2) sino cambiar con un if return
+
+def validar_letra(caracter) ->bool:
+    resultado = ""
+    if len(caracter) == 1 and validar_ascii_letra(caracter):
+      resultado = caracter
     
-    letras = "abcdefghijklmnopqrstuvwxyz"
-    if estado == "ingreso":
-        letras = "abcdefghijklmnopqrstuvwxyz"
-    else:
-        letras = "abcd"
-        
-    return caracter in letras
+    return resultado
 
-##sacar isdigit, hacer validacion propia
-def validar_numero(valor_actual, caracter)-> bool:
-    if caracter.isdigit():
-        texto_resultante = valor_actual + caracter
-        valor = int(texto_resultante)
-    else:
-        valor = 11
+ 
 
-    return valor <=10
+def validar_numero(caracter: str)-> str:
+    # poner validador de len caracter == 1
+    #len(caracter) ==1 evita que flechas o no letras crasheen
+    resultado = ""
+    if len(caracter) == 1 and validar_ascii_numero(caracter):
+        resultado = caracter
+
+    return resultado
+    
 
 
 def ingreso_datos():
     fondo = pygame.image.load("pyjuego/imagenes/campo.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
 
-    titulo = font.render("Ingresa tu nombre", True, "black")
+    titulo = fuente.render("Ingresa tu nombre", True, "black")
     lineas_instrucciones = [
     "Son 4 preguntas a responder ",
     "2 intentos por pregunta para elegir la opcion correcta",
@@ -44,7 +58,7 @@ def ingreso_datos():
     botones = [boton_salir,boton_continuar]
 
     color_active = "white"
-    color_passive = (100, 100, 100)
+    color_passive = (100, 100, 100) #cambiar
     rect_ingreso = pygame.Rect(470, 100, 220, 40)
     texto_usuario = ''
     texto_activo = False
@@ -73,10 +87,9 @@ def ingreso_datos():
                         texto_activo = True
                     else:
                         texto_activo = False
-                    #if boton_continuar.collidepoint(event.pos) and len(texto_usuario) > 0:
                     if colision(boton_continuar,event.pos) and len(texto_usuario) > 0:
                         resultado = texto_usuario
-                        running = False
+                        running = False #pasa a ingreso de nombre
                     if colision(boton_salir,event.pos):
                         running = False
 
@@ -86,14 +99,14 @@ def ingreso_datos():
         y = 200
         x = 250
         for linea in lineas_instrucciones:
-            superficie_linea = font.render(linea, True, "black")
+            superficie_linea = fuente.render(linea, True, "black")
             screen.blit(superficie_linea, (x, y))
             y += 60
         dibujar_botonesd(botones, screen, (mx, my))
 
-        color_nombre = color_active if texto_activo else color_passive
+        color_nombre = color_active if texto_activo else color_passive #cambiar
         pygame.draw.rect(screen, color_nombre, rect_ingreso)
-        superficie_texto = font.render(texto_usuario, True, (0, 0, 0))
+        superficie_texto = fuente.render(texto_usuario, True, (0, 0, 0))
         screen.blit(superficie_texto, (rect_ingreso.x + 5, rect_ingreso.y + 5))
 
         pygame.display.flip()
@@ -106,8 +119,8 @@ def ingresar_jugadores() -> int | None:
     fondo = pygame.image.load("pyjuego/imagenes/campo.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
 
-    titulo = font.render("Ingresa cantidad de jugadores", True, "black")
-    cantidad = font.render("Minimo 1, maximo 10",True, "black")
+    titulo = fuente.render("Ingresa cantidad de jugadores", True, "black")
+    cantidad = fuente.render("Minimo 1, maximo 10",True, "black")
 
     boton_continuar = crear_boton(500, 620, 200, 70, "white", "Continuar")
     boton_musica = crear_boton(1100, 620, 150,70, "white", "musica")
@@ -133,15 +146,16 @@ def ingresar_jugadores() -> int | None:
                     if event.key == pygame.K_BACKSPACE:
                         cant_jugadores = cant_jugadores[:-1]    
                     else:
-                        if validar_numero(cant_jugadores, event.unicode):
-                            cant_jugadores += event.unicode
+                        if validar_numero(event.unicode):
+                            nuevo = cant_jugadores + event.unicode
+                            if nuevo[0] != "0" and 1 <= int(nuevo) <= 10: # chatgpt ass
+                                 cant_jugadores = nuevo
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if rect_ingreso_numero.collidepoint(event.pos): 
                         numero_activo = True
                     else:
                         numero_activo = False
-                    #if boton_continuar.collidepoint(event.pos) and len(cant_jugadores) > 0:
                     if colision(boton_continuar, event.pos) and len(cant_jugadores) > 0:
                         resultado = int(cant_jugadores) 
                         running = False # devuelve resultado en vez de pygame.quit y hacer crash

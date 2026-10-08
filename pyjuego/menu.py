@@ -30,13 +30,14 @@ def iniciar()-> None:
     #configuracion inicial
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    fuente_final = crear_fuente(150)
     clock = pygame.time.Clock()
     pygame.display.set_caption("wawa")
     icono = pygame.image.load("pyjuego/imagenes/fred.png")
     pygame.display.set_icon(icono)
 
     #no cargar todos los gatos en una lista, elejir 1 numero con una funcion casera y dibujar la imagen
-    gato = elejir_numero(0,10)
+    gato = elejir_numero(1,10)
     img_elejida = pygame.image.load(f"pyjuego/imagenes/gatos/{gato}.png").convert_alpha()
     imagen_gato = pygame.transform.scale(img_elejida, (400, 400))
 
@@ -45,7 +46,7 @@ def iniciar()-> None:
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
 
     #objetos a usar
-    titulo = font_final.render("FINAL", True, "green")
+    titulo = fuente_final.render("FINAL", True, "green")
 
     boton_jugar = crear_boton(40,360,220,100,"white", "Jugar") 
     boton_puntuacion = crear_boton(40,480,220,100, "white", "puntajes")
@@ -95,6 +96,7 @@ def iniciar()-> None:
         screen.blit(fondo_escalado, (-50,-100))
         screen.blit(titulo, (30,50))
         screen.blit(imagen_gato, (800, 100))
+        
 
         dibujar_botonesd(botones,screen, (mx, my))
         pygame.display.flip()

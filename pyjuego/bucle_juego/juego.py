@@ -63,7 +63,7 @@ def crear_botones_opciones(pregunta_aleatoria) -> list:
     return lista
  
 
-def jugar():
+def jugar()-> dict | None:
     resultados = crear_resultados(200,320,200,50)
     #imagenes
     fondo = pygame.image.load("pyjuego/imagenes/castle2.png").convert()
@@ -176,7 +176,6 @@ def jugar():
                     juego_terminado = True
                     estado_final = False
                     guardar_puntaje(nombre_jugador,estado_final,puntuacion)
-                    
                     
                 puntuacion_actual = font.render(f"puntaje: {puntuacion}", True, "black")
                 intentos_actual = font.render(f"Intentos: {intentos}", True, "black")  

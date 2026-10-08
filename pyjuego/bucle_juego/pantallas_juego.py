@@ -3,7 +3,7 @@ import pygame
 from pyjuego.configuracion import *
 from pyjuego.diccionarios.boton import *
 
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))# traer desde configuracion
 clock = pygame.time.Clock()
 
 def respuesta_correcta() -> None:

@@ -19,7 +19,7 @@ def completar_resultados(resultados:dict,nombre_sala, puntaje_sala, puntaje_tota
 
 #cambiar por una casera
 def dibujar_resultados(resultados: dict, superficie):
-    fuente = crear_fuente_c(50)
+    fuente = crear_fuente(50)
     ancho_columna = 250
     alto_fila = 50
 
