@@ -3,6 +3,7 @@ import pygame, os
 from .configuracion import *
 from .diccionarios.boton import *
 from .ingresar_datos import *
+from .sonidos.manejo_sonido import *
 
 pantalla = crear_superficie_pantalla()
 clock = pygame.time.Clock()
@@ -11,10 +12,10 @@ fuente = crear_fuente(50)
 def guardar_puntaje(nombre:str, estado_final: bool,puntaje) -> None:
     #guarda el resultado del jugador en un archivo csv
     estado_final = "Completo" if estado_final else "No Completo"
-    with open("puntuacion.csv", "a") as archivo:
+    with open("pyjuego/puntuacion.csv", "a") as archivo:
         archivo.write(f"{nombre},{estado_final},{puntaje}\n")
 
-def ordenar_puntajes(lista:list)->None:
+def ordenar_puntajes(lista:list)-> list:
     #ordenar la puntuacion con algoritmo de burbuja
     recorrido = len(lista)
 
@@ -27,14 +28,15 @@ def ordenar_puntajes(lista:list)->None:
     return lista
 
 def cargar_puntuacion()-> list:
+    # transforma el csv en una lista y algoritmo de burbuja para ordenar los puntajes
     puntuacion = []
     try:
-        with open("puntuacion.csv", "r") as archivo:
+        with open("pyjuego/puntuacion.csv", "r") as archivo:
             for linea in archivo:
                 partes = linea.strip().split(",")  # strip saca el \n invisible
                 nombre = partes[0]
                 estado = partes[1]
-                puntaje = int(partes[2]) #casteo str a int
+                puntaje = int(partes[2]) 
                 puntuacion.append({"nombre": nombre, "estado": estado, "puntaje": puntaje}) 
             puntuacion_ordenada = ordenar_puntajes(puntuacion)
     except FileNotFoundError:
@@ -43,18 +45,48 @@ def cargar_puntuacion()-> list:
 
 def borrar_puntuacion() -> None:
     try:
-        os.remove("puntuacion.csv")
+        os.remove("pyjuego/puntuacion.csv")
     except FileNotFoundError:
         pass 
 
-def aplicar_scroll(block, posicion_scroll):
+def aplicar_scroll(block:dict, posicion_scroll:int) -> dict:
+    #cambia la posicion de las puntuacion segun el boton de scroleo(arriba o abajo)
     y_scroll = block["y_base"] - posicion_scroll
     block["rectangulo"].y = y_scroll
     block["texto_rectangulo"].center = block["rectangulo"].center
     return block
+
+def crear_rectangulos_puntuacion(puntajes:list) -> list:
+    #crea una lista de botones con los datos de puntajes
+    botones_puntaje = []
+    y = 170
+    for p in puntajes:
+        texto = f"{p['nombre']} | {p['estado']} | {p['puntaje']}"
+        box = crear_boton(350, y, 700,60,"gray", texto)
+        box["y_base"] = y
+        botones_puntaje.append(box)
+        y += 70
+    return botones_puntaje
+
+def valor_maximo(a:int,b:int)-> int:
+    #busca el maximo entre 2 int
+    maximo = 0
+    if a > b:
+        maximo = a
+    else:
+        maximo = b
+    return maximo
+
+def valor_minimo(a:int,b:int)-> int:
+    #busca el minimo entre 2 int
+    minimo = 0
+    if a < b:
+        minimo = a
+    else:
+        minimo = b
+    return minimo
     
-def puntuacion():
-    puntajes = cargar_puntuacion()
+def puntuacion()-> None:
 
     fondo = pygame.image.load("pyjuego/imagenes/arbol.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
@@ -69,40 +101,31 @@ def puntuacion():
     boton_bajar = crear_boton(1100, 500, 60, 50, "gray", "v")
 
     posicion_scroll = 0 # posicion actual de scroll
-    velocidad_scroll = 50 
+    velocidad_scroll = 50 # posicion y que se cambia
     lista_area = pygame.Rect(0, 140, 1280, 470) # define el area a usar scrolling, linea 108
     botones = [boton_salir, boton_borrar, boton_subir, boton_bajar, boton_musica]
 
-    #hacer funcion
-    blocks_puntaje = []
-    y = 170
-    for p in puntajes:
-        texto = f"{p['nombre']} | {p['estado']} | {p['puntaje']}"
-        box = crear_boton(350, y, 700,60,"gray", texto)
-        box["y_base"] = y
-        blocks_puntaje.append(box)
-        y += 70
+    puntajes = cargar_puntuacion()
+    botones_puntaje = crear_rectangulos_puntuacion(puntajes)
         
-
-    altura_lista = len(blocks_puntaje) * 80 # altura de lista segun entradas. 70 se corta el ultimo dato
-    #max_scroll = max(0, altura_lista - lista_area.height)  # limite de movimiento y de lista 
+    altura_lista = len(botones_puntaje) * 80 # altura de lista segun entradas. 70 se corta el ultimo dato
     max_scroll = (altura_lista - lista_area.height) # it just works!,lineas 96 y 100 resguardan error
 
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     #hacer manejo de evento casero, como menu.py
                     if colision(boton_borrar,event.pos):
                         salir_sonido()
                         borrar_puntuacion()
-                        blocks_puntaje = [] 
+                        botones_puntaje = [] 
                         puntajes = []
                     if colision(boton_salir, event.pos):
                         salir_sonido()
@@ -112,27 +135,29 @@ def puntuacion():
                         manejar_musica()
                     if colision(boton_subir, event.pos):
                         posicion_scroll -= velocidad_scroll 
-                        posicion_scroll = max(0, posicion_scroll)
-                        #posicion_scroll = max(0, min(posicion_scroll, max_scroll))#controla que no se suba mas de y
-                        #max (0 , (valor minimo/ posible negativo )) es 0 para que no sea negativo y se escape de la lista
+                        posicion_scroll = valor_maximo(0,posicion_scroll)#controla que no se suba mas de y
+                        #es 0 para que no sea negativo y se escape de la lista
                     if colision(boton_bajar, event.pos):
-                        posicion_scroll += velocidad_scroll 
-                        posicion_scroll = max(0, min(posicion_scroll, max_scroll))#controla que no se baje mas de y
+                        posicion_scroll += velocidad_scroll
+                        minimo = valor_minimo(posicion_scroll, max_scroll)
+                        posicion_scroll = valor_maximo(0, minimo)#controla que no se baje mas de y
         
         mx, my = pygame.mouse.get_pos()
         pantalla.blit(fondo_escalado, (-50,-100))
         pantalla.blit(titulo, (470,60))
         pantalla.blit(formato_puntaje, (420,100))
-        dibujar_botonesd(botones, pantalla, (mx, my))
+        dibujar_botones(botones, pantalla, (mx, my))
 
         if not puntajes:
            pantalla.blit(puntuacionVacia,(330,380))    
-        pantalla.set_clip(lista_area) # define el area a usar el scrolling
 
-        for block in blocks_puntaje:
+        pantalla.set_clip(lista_area) # define el area a usar el scrolling,dibuja los puntajes
+
+        for block in botones_puntaje:
             block = aplicar_scroll(block, posicion_scroll)
-            dibujar_botonesd(block, pantalla, (mx, my))
-        pantalla.set_clip(None)
+            dibujar_botones(block, pantalla, (mx, my))
+
+        pantalla.set_clip(None)# saca la restriccion de superficie para que todos los otros elementos se puedan redibujar en cada frame
 
         pygame.display.flip()
         clock.tick(60)

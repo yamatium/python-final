@@ -1,10 +1,11 @@
-import pygame, random
+import pygame
 
 from .configuracion import *
-from .bucle_juego.juego import *
 from .puntuacion import *
+from .bucle_juego.juego import *
 from .bucle_juego.pantallas_juego import *
 from .diccionarios.boton import *
+from .sonidos.manejo_sonido import *
 
 
 def ingreso_de_jugadores() -> int | None:
@@ -14,16 +15,38 @@ def ingreso_de_jugadores() -> int | None:
     #rehacer con while, linea 52 el for ni se usa, 
 def empezar() -> None:
     jugadores = ingreso_de_jugadores()
-    if jugadores :
+    if jugadores:
         pygame.mixer.music.fadeout(500)
         musica_menu(2)
         resultados = []
-        while len(resultados) < jugadores: 
-            resultado_jugador = jugar() # en modo torneo al apretar salir rompe, sacar el boton salir en torneo y que defaultee a resultado 0 y no respondio 1 pregunta
-            resultados.append(resultado_jugador)   
+        while len(resultados) < jugadores:
+            nombre_jugador = ingreso_datos()
+            resultado_jugador = jugar(nombre_jugador)
+            resultados.append(resultado_jugador)
         if jugadores > 1:
             mostrar_torneo(resultados)
         musica_menu(1)
+
+def definir_icono_nombre_ventana(icono:pygame.surface)->None:
+    #configura el icono y el nombre de la ventana del juego
+    pygame.display.set_icon(icono)
+    pygame.display.set_caption("FINAL")
+
+def elegir_imagen_gato(numero:int)-> pygame.Surface:
+    #crea y configura la imagen 
+    img_elejida = pygame.image.load(f"pyjuego/imagenes/gatos/{numero}.png").convert_alpha()
+    imagen_escalada = pygame.transform.scale(img_elejida, (400, 400))
+    return imagen_escalada
+
+def manejar_teclado(evento:pygame.event.Event)-> bool:
+    #manejo de eventos del teclado
+    running = True
+    print(type(evento))
+    if evento.key == pygame.K_m:
+        manejar_musica()
+    elif evento.key == pygame.K_ESCAPE:
+        running = False
+    return running
 
 
 def iniciar()-> None:
@@ -32,15 +55,11 @@ def iniciar()-> None:
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     fuente_final = crear_fuente(150)
     clock = pygame.time.Clock()
-    pygame.display.set_caption("wawa")
     icono = pygame.image.load("pyjuego/imagenes/fred.png")
-    pygame.display.set_icon(icono)
+    definir_icono_nombre_ventana(icono)
 
-    #no cargar todos los gatos en una lista, elejir 1 numero con una funcion casera y dibujar la imagen
     gato = elejir_numero(1,10)
-    img_elejida = pygame.image.load(f"pyjuego/imagenes/gatos/{gato}.png").convert_alpha()
-    imagen_gato = pygame.transform.scale(img_elejida, (400, 400))
-
+    imagen_gato = elegir_imagen_gato(gato)
     #imagenes
     fondo = pygame.image.load("pyjuego/imagenes/cloud.jpg").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
@@ -54,30 +73,23 @@ def iniciar()-> None:
     boton_salir = crear_boton(40,600,220,100,"white","Salir")
     botones = [boton_jugar,boton_puntuacion,boton_musica, boton_salir]
 
+    #poner manejo de evento afuera, aca esta anidada
+    #las colisiones no tienen acceso a los botones si esta afuera de la funcion
     def manejar_click (pos:tuple)-> bool:
         running = True
         if colision(boton_musica,pos):
             entrar_sonido()
             manejar_musica()
-        if colision(boton_puntuacion, pos):
+        elif colision(boton_puntuacion, pos):
             entrar_sonido()
             puntuacion()
-        if colision(boton_salir,pos):
+        elif colision(boton_salir,pos):
             salir_sonido()
             running = False
-        if colision(boton_jugar, pos):
+        elif colision(boton_jugar, pos):
             entrar_sonido()
             empezar()
         return running
-
-    def manejar_teclado(event)-> bool:
-        running = True
-        if event.key == pygame.K_m:
-            manejar_musica()
-        elif event.key == pygame.K_ESCAPE:
-            running = False
-        return running
-
 
     musica_menu(1)
     running = True
@@ -97,8 +109,7 @@ def iniciar()-> None:
         screen.blit(titulo, (30,50))
         screen.blit(imagen_gato, (800, 100))
         
-
-        dibujar_botonesd(botones,screen, (mx, my))
+        dibujar_botones(botones,screen, (mx, my))
         pygame.display.flip()
         clock.tick(60)
 

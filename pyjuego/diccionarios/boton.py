@@ -50,7 +50,7 @@ def dibujar_boton(boton:dict,color ,superficie):
         pygame.draw.rect(superficie, color, boton["rectangulo"])
     superficie.blit(boton["superficie"], boton["texto_rectangulo"])
 
-def dibujar_botonesd(botones, screen, mouse_pos):
+def dibujar_botones(botones, screen, mouse_pos):
     if type(botones) == list: # revisa que sea una lista
             for boton in botones:
                 boton["color"] = COLORS["lightblue"] if colision(boton,mouse_pos) else boton["color_constante"] # boton.contante es el color hardcodeado, sino boton.color cambia 

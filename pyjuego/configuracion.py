@@ -6,46 +6,27 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 font_final = pygame.font.SysFont(None, 150) #sacar variables globales
 font = pygame.font.SysFont(None, 50) #sacar variables globales
 
-entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
-salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
+#entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
+#salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
 
 def crear_superficie_pantalla()-> pygame.Surface:
+    #regresa una superficie para para ver el juego 
     return pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-def elejir_numero(inicio:int , fin: int):
+def elejir_numero(inicio:int , fin: int)-> int:
+    #trae un numero aleatorio
     numero_elejido = random.randint(inicio,fin)
     return numero_elejido
 
-#hacer funcion que regrese dimension de pantalla
 
-def crear_fuente(tamanio: int):
+def crear_fuente(tamanio: int)-> pygame.font:
+    #crea una fuente para usar, el tamanio normal es 50
     #tamanio = 50
     fuente = pygame.font.SysFont(None, tamanio)
     return fuente
 
-#hacer un archivo de modulo de sonido, manejo_sonido.py
-def entrar_sonido()-> None:
-    entrar_sfx.play()
-    pygame.time.wait(int(salir_sfx.get_length() * 1000))
+#hacer un archivo de modulo de sonido, manejo_sonido.py 
 
-def salir_sonido()-> None:
-    salir_sfx.play()
-    pygame.time.wait(int(salir_sfx.get_length() * 1000)) #regresa y convierte segundos en ms para time.wait
-
-def musica_menu(cancion:int)-> None:
-    if cancion == 1:
-        pygame.mixer.music.load("pyjuego/sonidos/eugene.mp3")
-    else:
-        pygame.mixer.music.load("pyjuego/sonidos/safe_place.mp3")
-    
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)
-
-def manejar_musica()-> None:
-    if pygame.mixer.music.get_busy():
-        pygame.mixer.music.pause()
-    else:
-        pygame.mixer.music.unpause()
 
 COLORS = {
     "gray": "gray",

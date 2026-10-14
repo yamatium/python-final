@@ -1,13 +1,13 @@
 import pygame
+
 from .configuracion import *
 from .diccionarios.boton import *
+from .sonidos.manejo_sonido import *
 
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
-#font = pygame.font.SysFont(None, 50)
 fuente = crear_fuente(50)
-
 
 def validar_ascii_letra(caracter)-> bool:
     #valida que el rango sea de la a a la z 
@@ -24,13 +24,11 @@ def validar_ascii_numero(caracter)-> bool:
     return valor_ascii_minimo <= ord(caracter) <= valor_ascii_maximo #revisar si se puede regresar asi,(programacion 2) sino cambiar con un if return
 
 def validar_letra(caracter) ->bool:
+    #validacion de caracter con su valor ascii
     resultado = ""
     if len(caracter) == 1 and validar_ascii_letra(caracter):
       resultado = caracter
-    
     return resultado
-
- 
 
 def validar_numero(caracter: str)-> str:
     # poner validador de len caracter == 1
@@ -40,10 +38,19 @@ def validar_numero(caracter: str)-> str:
         resultado = caracter
 
     return resultado
-    
+
+def dibujar_intrucciones(lista_instrucciones:list) ->None:
+    #dibuja las instrucciones del juego
+    y = 300
+    x = 250
+    for linea in lista_instrucciones:
+        superficie_linea = fuente.render(linea, True, "black")
+        screen.blit(superficie_linea, (x, y))
+        y += 60
 
 
-def ingreso_datos():
+
+def ingreso_datos()->str:
     fondo = pygame.image.load("pyjuego/imagenes/campo.png").convert()
     fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
 
@@ -53,9 +60,9 @@ def ingreso_datos():
     "2 intentos por pregunta para elegir la opcion correcta",
     "m = pausar musica"]
 
-    boton_continuar = crear_boton(450, 620, 200, 70, "white", "Continuar")
-    boton_salir = crear_boton(80, 620, 200, 70, "white", "Salir")
-    botones = [boton_salir,boton_continuar]
+    boton_continuar = crear_boton(480, 620, 200, 70, "white", "Continuar")
+    #boton_salir = crear_boton(80, 620, 200, 70, "white", "Salir") no tiene sentido que pueda salir antes de poner el nombre
+    botones = [boton_continuar]
 
     color_active = "white"
     color_passive = (100, 100, 100) #cambiar
@@ -63,15 +70,15 @@ def ingreso_datos():
     texto_usuario = ''
     texto_activo = False
 
-    resultado = None #para salir al menu, revisar que en modo torneo no se pueda salir porque un jugador cierra el torneo
+    resultado = None 
     running = True
     while running:
         for event in pygame.event.get():
+            #hacer manejo evento teclado
+            #sacado esc
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
                 if event.key == pygame.K_m:
                     entrar_sonido()
                     manejar_musica()
@@ -81,28 +88,20 @@ def ingreso_datos():
                     else:
                         if len(texto_usuario) < 10 and validar_letra(event.unicode):
                             texto_usuario += event.unicode
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if rect_ingreso.collidepoint(event.pos): 
-                        texto_activo = True
-                    else:
-                        texto_activo = False
-                    if colision(boton_continuar,event.pos) and len(texto_usuario) > 0:
-                        resultado = texto_usuario
-                        running = False #pasa a ingreso de nombre
-                    if colision(boton_salir,event.pos):
-                        running = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if rect_ingreso.collidepoint(event.pos): 
+                    texto_activo = True
+                else:
+                    texto_activo = False
+                if colision(boton_continuar,event.pos) and len(texto_usuario) > 0:
+                    resultado = texto_usuario
+                    running = False #pasa a ingreso de nombre
 
         mx, my = pygame.mouse.get_pos()
         screen.blit(fondo_escalado, (-50,-100))
         screen.blit(titulo, (430,50))
-        y = 200
-        x = 250
-        for linea in lineas_instrucciones:
-            superficie_linea = fuente.render(linea, True, "black")
-            screen.blit(superficie_linea, (x, y))
-            y += 60
-        dibujar_botonesd(botones, screen, (mx, my))
+        dibujar_intrucciones(lineas_instrucciones)
+        dibujar_botones(botones, screen, (mx, my))
 
         color_nombre = color_active if texto_activo else color_passive #cambiar
         pygame.draw.rect(screen, color_nombre, rect_ingreso)
@@ -111,6 +110,7 @@ def ingreso_datos():
 
         pygame.display.flip()
         clock.tick(60) 
+
     return resultado
 
 
@@ -137,6 +137,7 @@ def ingresar_jugadores() -> int | None:
     running = True
     while running:
         for event in pygame.event.get():
+            #hacer manejo evento teclado
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
@@ -150,21 +151,21 @@ def ingresar_jugadores() -> int | None:
                             nuevo = cant_jugadores + event.unicode
                             if nuevo[0] != "0" and 1 <= int(nuevo) <= 10: # chatgpt ass
                                  cant_jugadores = nuevo
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if rect_ingreso_numero.collidepoint(event.pos): 
-                        numero_activo = True
-                    else:
-                        numero_activo = False
-                    if colision(boton_continuar, event.pos) and len(cant_jugadores) > 0:
-                        resultado = int(cant_jugadores) 
-                        running = False # devuelve resultado en vez de pygame.quit y hacer crash
-                    if colision(boton_musica, event.pos):
-                        entrar_sonido()
-                        manejar_musica()
-                    if colision(boton_salir, event.pos):
-                        salir_sonido()
-                        running = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                #hacer manejo evento 
+                if rect_ingreso_numero.collidepoint(event.pos): 
+                    numero_activo = True
+                else:
+                    numero_activo = False
+                if colision(boton_continuar, event.pos) and len(cant_jugadores) > 0:
+                    resultado = int(cant_jugadores) 
+                    running = False # devuelve resultado en vez de pygame.quit y hacer crash
+                if colision(boton_musica, event.pos):
+                    entrar_sonido()
+                    manejar_musica()
+                if colision(boton_salir, event.pos):
+                    salir_sonido()
+                    running = False
 
         screen.blit(fondo_escalado, (-50,-100))
         mx, my = pygame.mouse.get_pos()
@@ -175,7 +176,7 @@ def ingresar_jugadores() -> int | None:
         pygame.draw.rect(screen, color_numero, rect_ingreso_numero)
         superficie_numero = font.render(cant_jugadores, True, "black")
         screen.blit(superficie_numero, (rect_ingreso_numero.x + 5,rect_ingreso_numero.y + 5))
-        dibujar_botonesd(botones, screen, (mx, my))
+        dibujar_botones(botones, screen, (mx, my))
 
         pygame.display.flip()
         clock.tick(60)
