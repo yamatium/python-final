@@ -2,31 +2,23 @@ import pygame, random
 
 pygame.mixer.init()
 pygame.font.init()
-WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
-font_final = pygame.font.SysFont(None, 150) #sacar variables globales
-font = pygame.font.SysFont(None, 50) #sacar variables globales
-
-#entrar_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0099.mp3")
-#salir_sfx = pygame.mixer.Sound("pyjuego/sonidos/SD_0111.mp3")
 
 def crear_superficie_pantalla()-> pygame.Surface:
     #regresa una superficie para para ver el juego 
-    return pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    ancho = 1280 
+    alto = 720
+    return pygame.display.set_mode((ancho, alto))
 
 def elejir_numero(inicio:int , fin: int)-> int:
     #trae un numero aleatorio
     numero_elejido = random.randint(inicio,fin)
     return numero_elejido
 
-
 def crear_fuente(tamanio: int)-> pygame.font:
     #crea una fuente para usar, el tamanio normal es 50
     #tamanio = 50
     fuente = pygame.font.SysFont(None, tamanio)
     return fuente
-
-#hacer un archivo de modulo de sonido, manejo_sonido.py 
-
 
 COLORS = {
     "gray": "gray",
@@ -36,7 +28,6 @@ COLORS = {
     "royalblue": "#141828",
     "lightblue": "#87CEFA",
 }
-
 
 preguntas = {
      0:{

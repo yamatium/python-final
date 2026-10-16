@@ -1,11 +1,12 @@
 import pygame
 
 from .configuracion import *
-from .puntuacion import *
+from .manejo_puntaje.puntuacion import puntuacion
 from .bucle_juego.juego import *
 from .bucle_juego.pantallas_juego import *
 from .diccionarios.boton import *
 from .sonidos.manejo_sonido import *
+from .ingresar_datos import ingresar_jugadores,ingreso_datos
 
 
 def ingreso_de_jugadores() -> int | None:
@@ -52,7 +53,7 @@ def manejar_teclado(evento:pygame.event.Event)-> bool:
 def iniciar()-> None:
     #configuracion inicial
     pygame.init()
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    pantalla = crear_superficie_pantalla()
     fuente_final = crear_fuente(150)
     clock = pygame.time.Clock()
     icono = pygame.image.load("pyjuego/imagenes/fred.png")
@@ -62,7 +63,7 @@ def iniciar()-> None:
     imagen_gato = elegir_imagen_gato(gato)
     #imagenes
     fondo = pygame.image.load("pyjuego/imagenes/cloud.jpg").convert()
-    fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
+    fondo_escalado = pygame.transform.scale(fondo, (1380, 920)) # WINDOW_HEIGHT= 720,WINDOW_WIDTH=1280
 
     #objetos a usar
     titulo = fuente_final.render("FINAL", True, "green")
@@ -95,7 +96,6 @@ def iniciar()-> None:
     running = True
     while running:
         event_list = pygame.event.get()
-        #hacer manejo de event, 
         for event in event_list:
             if event.type == pygame.QUIT:
                 running = False
@@ -104,12 +104,12 @@ def iniciar()-> None:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 running = manejar_click(event.pos)
             
-        mx, my = pygame.mouse.get_pos() #ya regresa una tupla
-        screen.blit(fondo_escalado, (-50,-100))
-        screen.blit(titulo, (30,50))
-        screen.blit(imagen_gato, (800, 100))
+        mx, my = pygame.mouse.get_pos()
+        pantalla.blit(fondo_escalado, (-50,-100))
+        pantalla.blit(titulo, (30,50))
+        pantalla.blit(imagen_gato, (800, 100))
         
-        dibujar_botones(botones,screen, (mx, my))
+        dibujar_botones(botones,pantalla, (mx, my))
         pygame.display.flip()
         clock.tick(60)
 

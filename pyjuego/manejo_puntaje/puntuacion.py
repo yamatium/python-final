@@ -1,9 +1,9 @@
 import pygame, os
 
-from .configuracion import *
-from .diccionarios.boton import *
-from .ingresar_datos import *
-from .sonidos.manejo_sonido import *
+from pyjuego.configuracion import *
+from pyjuego.diccionarios.boton import *
+from pyjuego.ingresar_datos import *
+from pyjuego.sonidos.manejo_sonido import *
 
 pantalla = crear_superficie_pantalla()
 clock = pygame.time.Clock()
@@ -12,7 +12,7 @@ fuente = crear_fuente(50)
 def guardar_puntaje(nombre:str, estado_final: bool,puntaje) -> None:
     #guarda el resultado del jugador en un archivo csv
     estado_final = "Completo" if estado_final else "No Completo"
-    with open("pyjuego/puntuacion.csv", "a") as archivo:
+    with open("pyjuego/manejo_puntaje/puntuacion.csv", "a") as archivo:
         archivo.write(f"{nombre},{estado_final},{puntaje}\n")
 
 def ordenar_puntajes(lista:list)-> list:
@@ -31,21 +31,20 @@ def cargar_puntuacion()-> list:
     # transforma el csv en una lista y algoritmo de burbuja para ordenar los puntajes
     puntuacion = []
     try:
-        with open("pyjuego/puntuacion.csv", "r") as archivo:
+        with open("pyjuego/manejo_puntaje/puntuacion.csv", "r") as archivo:
             for linea in archivo:
                 partes = linea.strip().split(",")  # strip saca el \n invisible
                 nombre = partes[0]
                 estado = partes[1]
                 puntaje = int(partes[2]) 
                 puntuacion.append({"nombre": nombre, "estado": estado, "puntaje": puntaje}) 
-            puntuacion_ordenada = ordenar_puntajes(puntuacion)
     except FileNotFoundError:
         print("Archivo no encontrado")
-    return puntuacion_ordenada # devuelve una lista de diccionarios
+    return ordenar_puntajes(puntuacion) # devuelve una lista de diccionarios
 
 def borrar_puntuacion() -> None:
     try:
-        os.remove("pyjuego/puntuacion.csv")
+        os.remove("pyjuego/manejo_puntaje/puntuacion.csv")
     except FileNotFoundError:
         pass 
 
@@ -89,7 +88,7 @@ def valor_minimo(a:int,b:int)-> int:
 def puntuacion()-> None:
 
     fondo = pygame.image.load("pyjuego/imagenes/arbol.png").convert()
-    fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
+    fondo_escalado = pygame.transform.scale(fondo, (1380, 920 ))
     puntuacionVacia = fuente.render("No hay puntajes todavia, ve a jugar!", True, "black")
     titulo = fuente.render("Tabla de puntuaciones", True, "black")
     formato_puntaje = fuente.render("Jugador | estado final | puntaje", True, "black")

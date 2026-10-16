@@ -5,7 +5,7 @@ from .diccionarios.boton import *
 from .sonidos.manejo_sonido import *
 
 pygame.init()
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pantalla = crear_superficie_pantalla()
 clock = pygame.time.Clock()
 fuente = crear_fuente(50)
 
@@ -45,14 +45,13 @@ def dibujar_intrucciones(lista_instrucciones:list) ->None:
     x = 250
     for linea in lista_instrucciones:
         superficie_linea = fuente.render(linea, True, "black")
-        screen.blit(superficie_linea, (x, y))
+        pantalla.blit(superficie_linea, (x, y))
         y += 60
-
 
 
 def ingreso_datos()->str:
     fondo = pygame.image.load("pyjuego/imagenes/campo.png").convert()
-    fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
+    fondo_escalado = pygame.transform.scale(fondo, (1380, 920 ))
 
     titulo = fuente.render("Ingresa tu nombre", True, "black")
     lineas_instrucciones = [
@@ -98,26 +97,24 @@ def ingreso_datos()->str:
                     running = False #pasa a ingreso de nombre
 
         mx, my = pygame.mouse.get_pos()
-        screen.blit(fondo_escalado, (-50,-100))
-        screen.blit(titulo, (430,50))
+        pantalla.blit(fondo_escalado, (-50,-100))
+        pantalla.blit(titulo, (430,50))
         dibujar_intrucciones(lineas_instrucciones)
-        dibujar_botones(botones, screen, (mx, my))
+        dibujar_botones(botones, pantalla, (mx, my))
 
         color_nombre = color_active if texto_activo else color_passive #cambiar
-        pygame.draw.rect(screen, color_nombre, rect_ingreso)
+        pygame.draw.rect(pantalla, color_nombre, rect_ingreso)
         superficie_texto = fuente.render(texto_usuario, True, (0, 0, 0))
-        screen.blit(superficie_texto, (rect_ingreso.x + 5, rect_ingreso.y + 5))
+        pantalla.blit(superficie_texto, (rect_ingreso.x + 5, rect_ingreso.y + 5))
 
         pygame.display.flip()
         clock.tick(60) 
-
     return resultado
-
 
 def ingresar_jugadores() -> int | None:
 
     fondo = pygame.image.load("pyjuego/imagenes/campo.png").convert()
-    fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
+    fondo_escalado = pygame.transform.scale(fondo, (1380, 920 ))
 
     titulo = fuente.render("Ingresa cantidad de jugadores", True, "black")
     cantidad = fuente.render("Minimo 1, maximo 10",True, "black")
@@ -167,16 +164,16 @@ def ingresar_jugadores() -> int | None:
                     salir_sonido()
                     running = False
 
-        screen.blit(fondo_escalado, (-50,-100))
+        pantalla.blit(fondo_escalado, (-50,-100))
         mx, my = pygame.mouse.get_pos()
-        screen.blit(titulo, (350,200))
-        screen.blit(cantidad,(420,260))
+        pantalla.blit(titulo, (350,200))
+        pantalla.blit(cantidad,(420,260))
 
         color_numero = color_active if numero_activo else color_passive
-        pygame.draw.rect(screen, color_numero, rect_ingreso_numero)
-        superficie_numero = font.render(cant_jugadores, True, "black")
-        screen.blit(superficie_numero, (rect_ingreso_numero.x + 5,rect_ingreso_numero.y + 5))
-        dibujar_botones(botones, screen, (mx, my))
+        pygame.draw.rect(pantalla, color_numero, rect_ingreso_numero)
+        superficie_numero = fuente.render(cant_jugadores, True, "black")
+        pantalla.blit(superficie_numero, (rect_ingreso_numero.x + 5,rect_ingreso_numero.y + 5))
+        dibujar_botones(botones, pantalla, (mx, my))
 
         pygame.display.flip()
         clock.tick(60)

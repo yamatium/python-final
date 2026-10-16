@@ -1,10 +1,5 @@
 from pyjuego.configuracion import *
 
-def crear_fuente_b():
-    tamanio = 50
-    fuente = pygame.font.SysFont(None, tamanio)
-    return fuente
-
 def crear_superficie_texto(texto, fuente):
     texto_superficie = fuente.render(texto, True, "black")
     return texto_superficie
@@ -16,7 +11,6 @@ def crear_rectangulo(x, y, ancho, alto):
 def traer_rectangulo_texto(superficie, rect_boton):
     texto_rectangulo = superficie.get_rect(center=rect_boton.center)
     return texto_rectangulo
-
 
 def formatear_diccionario(x:int, y:int, ancho:int, alto:int, color:str, texto:str,rectangulo, superficie,texto_rectangulo)-> dict:
     boton = {}
@@ -34,7 +28,7 @@ def formatear_diccionario(x:int, y:int, ancho:int, alto:int, color:str, texto:st
 
 
 def crear_boton(x:int, y:int, ancho:int, alto:int, color:str, texto:str) -> dict:
-    fuente = crear_fuente_b()
+    fuente = crear_fuente(50)
     rectangulo = crear_rectangulo(x,y,ancho,alto)
     superficie_texto = crear_superficie_texto(texto, fuente)
 

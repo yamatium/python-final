@@ -16,7 +16,8 @@ def crear_cronometro(tiempo:int)-> dict:
 
 def actualizar_tiempo(cronometro: dict) -> None:
     if not cronometro["tiempo_terminado"]:
-        ahora = pygame.time.get_ticks()
+        #ahora = pygame.time.get_ticks()
+        ahora = pygame_traer_tick()
         pasado = (ahora - cronometro["pygame_tiempo_tick"]) / 1000
         cronometro["tiempo_restante"] -= pasado
         cronometro["pygame_tiempo_tick"] = ahora
@@ -24,13 +25,14 @@ def actualizar_tiempo(cronometro: dict) -> None:
              cronometro["tiempo_terminado"] = True
 
 #pantalla = class 'pygame.surface.Surface' 
-def dibujar_cronometro(cronometro:dict, pantalla) -> None:
+def dibujar_cronometro(cronometro:dict, pantalla:pygame.Surface) -> None:
+     fuente = crear_fuente(50)
      if cronometro["tiempo_restante"] <= 11:
           color_fondo = "red"
      else:
         color_fondo = "gray"
      segundos = int(cronometro["tiempo_restante"])
-     rectangulo = font.render(f"Tiempo: {segundos}", True, "black", color_fondo)
+     rectangulo = fuente.render(f"Tiempo: {segundos}", True, "black", color_fondo)
      pantalla.blit(rectangulo,(2,300))
 
 def resetear_cronometro(cronometro:dict)-> None:

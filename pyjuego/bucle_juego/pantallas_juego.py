@@ -4,9 +4,9 @@ from pyjuego.configuracion import *
 from pyjuego.diccionarios.boton import *
 from pyjuego.sonidos.manejo_sonido import *
 
-screen = crear_superficie_pantalla()
+pantalla = crear_superficie_pantalla()
 clock = pygame.time.Clock()
-fuente = crear_fuente(50)
+fuente = crear_fuente(50) 
 
 def respuesta_correcta() -> None:
     # convert cuando no necesitas transparencia, convert_alpha cuando si
@@ -46,14 +46,14 @@ def respuesta_correcta() -> None:
                         manejar_musica()
 
         mx, my = pygame.mouse.get_pos()
-        screen.blit(fondo_real, (0,0))
-        screen.blit(bien_scale, (340,160))
-        screen.blit(mensaje, (410,120))
-        screen.blit(fondo_scale, (-100, -120))
-        screen.blit(izquierda_scale, (x,100))
-        screen.blit(derecha_scale, (z,100))
+        pantalla.blit(fondo_real, (0,0))
+        pantalla.blit(bien_scale, (340,160))
+        pantalla.blit(mensaje, (410,120))
+        pantalla.blit(fondo_scale, (-100, -120))
+        pantalla.blit(izquierda_scale, (x,100))
+        pantalla.blit(derecha_scale, (z,100))
 
-        dibujar_botones(botones,screen,(mx,my))
+        dibujar_botones(botones,pantalla,(mx,my))
         x -= 0.6
         z += 0.6
         
@@ -115,13 +115,11 @@ def encontrar_ganadores_sala(resultados:list, sala_maxima:int)-> list:
     return ganadores_sala
 
 
-
-
 #rehacer la funcion , con funciones caseras
 def mostrar_torneo(resultados:list) -> None:
 
     fondo = pygame.image.load("pyjuego/imagenes/forest.png").convert()
-    fondo_escalado = pygame.transform.scale(fondo, (WINDOW_WIDTH + 100, WINDOW_HEIGHT +200 ))
+    fondo_escalado = pygame.transform.scale(fondo, (1380, 920 ))
     boton_musica = crear_boton(1100, 620, 150,70, "white", "musica")
     boton_salir = crear_boton(400, 600, 450,100,"white", "Salir")
 
@@ -158,12 +156,12 @@ def mostrar_torneo(resultados:list) -> None:
 
         texto = mensaje_sala_1(eliminados_sala)
 
-        screen.blit(fondo_escalado, (-50,-100))
+        pantalla.blit(fondo_escalado, (-50,-100))
         mx, my = pygame.mouse.get_pos()
         dibujar = [titulo,puntaje,sala,texto]
         posiciones = [(400, 40),(400, 240),(400, 290),(400, 340)]  
         for i in range(4):
-            screen.blit(dibujar[i], (posiciones[i]))
-        dibujar_botones(botones,screen,(mx,my))
+            pantalla.blit(dibujar[i], (posiciones[i]))
+        dibujar_botones(botones,pantalla,(mx,my))
         pygame.display.flip()
         clock.tick(60)
